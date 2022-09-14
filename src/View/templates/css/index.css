@@ -1,0 +1,15 @@
+.login-register {
+    color: white;
+}
+li {
+    margin-left: 10px;
+}
+.login-div{
+    display: none;
+}
+.forget-div{
+    display: none;
+}
+.register-div {
+    display: none;
+}

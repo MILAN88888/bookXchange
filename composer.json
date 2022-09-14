@@ -1,0 +1,18 @@
+{
+    "name": "bookxchange/bookxchange",
+    "description": "\"This is bookxchange web interface\"",
+    "autoload": {
+        "psr-4": {
+            "Bookxchange\\Bookxchange\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Milan Chaudhary",
+            "email": "chaudharymilan996@gmail.com"
+        }
+    ],
+    "require": {
+        "twig/twig": "3.3"
+    }
+}
