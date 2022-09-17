@@ -1,8 +1,7 @@
 <?php
-require '../../vendor/autoload.php';
-use Bookxchange\Bookxchange\Controller\User;
-$user = new User();
-session_start();
+require '../Include/allcontrollerobj.php';
+
+echo $home->passwordReset();
 if (isset($_SESSION['msg'])) {
     echo $_SESSION['msg'];
     unset($_SESSION['msg']);
@@ -19,7 +18,3 @@ if (isset($_POST['newpass'])) {
     }
 }
 ?>
-<form action="reset.php" method="post">
-   <input type="password" name="pass" placeholder="Enter new password" required >
-    <input type="submit" name="newpass" value="reset">
-</form>

@@ -1,1 +1,3 @@
-response
+<?php
+require '../Include/common.php';
+?>

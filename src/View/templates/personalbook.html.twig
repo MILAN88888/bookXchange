@@ -1,0 +1,64 @@
+<p id="edit-msg"></p>
+<div id="personalbook-div">
+{% for book in personalBooks %}
+<div style="display: inline-block">
+<div class="row d-flex  mx-1">
+<div id="book{{book.id}}" class="card" style="width: 15rem;">
+    <img src="../Upload/Books/{{ book.image }}" width="100px" height="100px" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">{{ book.book_name }}</h5>
+      <p class="card-text">Author : {{ book.author}} <br>Edition : {{ book.edition }}<br> Status : {{ book.status }} <br> Rating : {{ book.rating }}</p>
+      <a href="#" onclick="myedit('{{book.id}}')" class="btn btn-primary">Edit</a>
+      <a href="#" onclick="bookdelete('{{ book.id }}')" class="btn btn-primary">Delete</a>
+    </div>
+  </div>
+</div>
+</div>
+{% endfor %}
+
+</div>
+<div id="editbook-div">
+    <button id="edit-close">x</button>
+    <form action="" id="editbook-form" method="post" enctype="multipart/form-data" autocomplete="off">
+        <img width="200px"height="50px" id="edit-img" />
+        <input hidden type="text" id="book_id" name="book_id" placeholder="Book id">
+        <input hidden type="text" id="old_image" name="old_image" >
+        <input type="file" id="book_image" name="book_image" ><span>optional</span>
+        <label id="#book_img_error" class="error"></label>
+        <input type="text" id="book_name" name="book_name" placeholder="Book Name" >
+        <input type="text" id="book_genre" name="book_genre" placeholder="Book Genre" >
+        <input type="text" id="book_author" name="book_author" placeholder="Book Author" >
+        <input type="text" id="book_edition" name="book_edition" placeholder="Book Edition">
+        <input type="text" id="book_des" name="book_des" placeholder="Book Description" >
+        <select>
+            <option>Not-issued</option>
+        </select>
+        <input type="number" id="book_rating" min="1" max="5" step="0.5" name="book_rating" placeholder="Rating 1 to 5" required>
+        <input type="submit" name="editbook" value="edit book" >
+    </form>
+
+</div>
+<style>
+    #editbook-div {
+        width: 250px;
+    }
+    #editbook-div {
+        display: none;
+    }
+    #edit-close {
+        float: right;
+    }
+    .error{
+        color:red;
+    }
+</style>
+
+<script src="{{ baseurl }}js/personalbook.js"></script>
+
+
+<script>
+    $(document).find('#edit-close').click(function(){
+        $(document).find('#editbook-div').hide();
+    })
+    
+</script>

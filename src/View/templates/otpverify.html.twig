@@ -1,0 +1,36 @@
+<html>
+<head>
+    <title>verify</title>
+    <link rel="stylesheet" href="{{ baseurl }}bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ baseurl }}css/index.css">
+    <script src="{{ baseurl }}js/jquery-3.6.1.min.js"></script>
+    <script src="{{ baseurl }}js/jquery.validate.min.js"></script>
+    <script src="{{ baseurl }}bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="{{ baseurl }}js/index.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+        crossorigin="anonymous"></script>
+</head>
+
+<body style="background-color: lightyellow;">
+
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: lightgreen;">
+        <a class="navbar-brand a" href='../../index.php'>BookXchange</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+
+            </ul>
+
+        </div>
+    </nav>
+    <form action="otpverify.php" method="post">
+        <input type="tesxt" name="otp" placeholder="enter 4 digit otp" required>
+        <input type="submit" name="otpsubmit" value="submit otp">
+    </form>

@@ -1,0 +1,26 @@
+
+<div id="addbook-div">
+    <form action="addbook.php" id="addbook-form" class="addbook-form" method="post" enctype="multipart/form-data">
+        <input type="file" name="book_image" placeholder="choose book image">
+        <input type="text" name="book_name" placeholder="Book Name">
+        <input type="text" name="book_genre" placeholder="Book Genre" >
+        <input type="text" name="book_author" placeholder="Book Author" >
+        <input type="text" name="book_edition" placeholder="Book Edition" >
+        <input type="text" name="book_des" placeholder="Book Description" >
+        <select>
+            <option>Not-issued</option>
+        </select>
+        <input type="number" min="1" max="5" step="0.5" name="book_rating" placeholder="Rating 1 to 5" >
+        <input type="submit" name="addbook" value="add book" >
+    </form>
+</div>
+<style>
+    #addbook-div {
+        width: 250px;
+    }
+    .error{
+        color:red;
+    }
+</style>
+<script src="{{ baseurl }}js/addbook.js"></script>
+

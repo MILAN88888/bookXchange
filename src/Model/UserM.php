@@ -1,7 +1,7 @@
 <?php
 namespace Bookxchange\Bookxchange\Model;
 use Bookxchange\Bookxchange\Config\DbConnection;
-class User
+class UserM
 {   
     private $_conn;
     public function __construct()
@@ -52,16 +52,12 @@ class User
     }
     public function getRegister($user_image, $user_name, $user_mobile, $user_address, $user_email, $user_pass): int
     {
-        $lattitude = 0;
-        $longitude = 0;
-        $token = 0;
-        $rating = 0;
-        $joindate = date("Y-m-d");
+        $token = '';
         $usertype = 0;
-        $status = 0;
-        $sql = "INSERT INTO `register` (image,user_name,mobile_no,address,email,lattitude,longitude,password,rating,status,token,user_type,join_date) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $status = 'active';
+        $sql = "INSERT INTO `register` (image,user_name,mobile_no,address,email,password,status,token,user_type) values(?,?,?,?,?,?,?,?,?)";
         $stmt = $this->_conn->prepare($sql);
-        $stmt->bind_param("sssssssssssss",$user_image, $user_name, $user_mobile, $user_address, $user_email, $lattitude, $longitude, $user_pass, $rating, $status,$token,$usertype,$joindate);
+        $stmt->bind_param("sssssssss",$user_image, $user_name, $user_mobile, $user_address, $user_email,  $user_pass, $status, $token, $usertype);
         $stmt->execute();
         if ($stmt->affected_rows > 0 )
         {
@@ -69,9 +65,10 @@ class User
         } else {
             $res = 0;
         }
+        $stmt->close();
         return $res;
     }
-    public function updateToken(string $user_id, string $token):bool
+    public function updateToken(string $user_id, $token):bool
     {
         $sql = "UPDATE `register` SET token=? WHERE id = ?";
         $stmt = $this->_conn->prepare($sql);
@@ -95,6 +92,7 @@ class User
         } else {
             $res = true;
         }
+        $stmt->close();
         return $res;
     }
            

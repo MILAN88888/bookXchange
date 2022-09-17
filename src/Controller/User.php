@@ -2,23 +2,29 @@
 
 namespace Bookxchange\Bookxchange\Controller;
 
+use Bookxchange\Bookxchange\Model\UserM;
+
 class User
 {
     protected $userM;
-    public function __construct()
+    public function __construct($baseurl)
     {
-        $this->userM = new \Bookxchange\Bookxchange\Model\User();
+        $this->userM = new UserM();
     }
-    public function logout()
+    public function logout(string $user_id)
     {
-        session_start();
-        if (isset($_SESSION['user_id']) && isset($_SESSION['token'])) {
-            $_SESSION['token']=0;
-            $updateToken = $this->userM->updateToken($_SESSION['user_id'], $_SESSION['token']);
-            session_unset($_SESSION['user_id']);
+        $token=null;
+        $updateToken = $this->userM->updateToken($user_id, $token);
+        if ($updateToken == true) {
+            session_unset();
             session_destroy();
+            $_SESSION['msg'] = "Logout successfully!!";
             header("location:../../index.php");
+        } else {
+            $_SESSION['msg'] = "Error in logout";
+            header("location:dashboard.php");
         }
+        
     }
     public function getLogin(string $phone, string $pass, int $id=0)
     {
@@ -27,14 +33,15 @@ class User
         if ($isPhoneExit === true) {
             $getLoginDetail = $this->userM->getLogin($phone);
             if (password_verify($pass, $getLoginDetail['password'])) {
-                if ($getLoginDetail['token'] == 0) {
+                if ($getLoginDetail['token'] == null) {
                     $token = bin2hex(random_bytes(32));
                     $updateToken = $this->userM->updateToken($getLoginDetail['id'], $token);
                     $_SESSION['user_id'] = $getLoginDetail['id'];
                     $_SESSION['token'] = $token;
+                    $_SESSION['msg'] = "Login Successfully!";
                     header('location:dashboard.php');
                 } else {
-                    $_SESSION['fail'] = "Invalid Password!";
+                    $_SESSION['fail'] = "No token!";
                     header('location:../../index.php');
                 }
             } else {
@@ -46,8 +53,14 @@ class User
             header('location:../../index.php');
         }
     }
-    public function getRegister($user_image, $user_name, $user_mobile, $user_address, $user_email, $user_pass)
-    {
+    public function getRegister(
+        $user_image,
+        $user_name,
+        $user_mobile,
+        $user_address,
+        $user_email,
+        $user_pass
+    ) {
         $isPhoneExit = $this->userM->isPhoneExit($user_mobile);
         if ($isPhoneExit === false) {
             $isEmailExit = $this->userM->isEmailExit($user_email);
@@ -69,11 +82,11 @@ class User
             header('location:../../index.php');
         }
     }
-    public function getForgetPass(string $mobile_no) 
+    public function getForgetPass(string $mobile_no)
     {
         $isPhoneExit = $this->userM->isPhoneExit($mobile_no);
         if ($isPhoneExit === true) {
-            $otp = mt_rand(1111,9999);
+            $otp = mt_rand(1111, 9999);
             $otpExpire = time()+120;
             $_SESSION['otp'] = $otp;
             $_SESSION['otpExpire'] = $otpExpire;
@@ -81,15 +94,15 @@ class User
             $myfile = fopen("otp.txt", "w") or die("Unable to open file!");
             fwrite($myfile, $otp);
             fclose($myfile);
-            $_SESSION['msg'] = "Otp send..";
+            $_SESSION['msg'] = "Otp sent..";
             header('location:otpverify.php');
         } else {
             $_SESSION['fail'] = "Phone no. not  exit!";
             header('location:../../index.php');
-            
         }
     }
-    public function updatePassword(string $pass, string $mobile) {
+    public function updatePassword(string $pass, string $mobile)
+    {
         $hashPass = password_hash($pass, PASSWORD_BCRYPT);
         $updatePass = $this->userM->updatePassword($hashPass, $mobile);
         return $updatePass;
