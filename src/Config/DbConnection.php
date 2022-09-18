@@ -4,8 +4,8 @@
  *
  * PHP version 8.1.3
  *
- * @category bookxchange
- * @package  bookxchange
+ * @category Bookxchange
+ * @package  Bookxchange
  * @author   Original Author <chaudharymilan996@gmail.com>
  * @license  http://www.php.net/license/3_01.txt  PHP License 3.01
  * @link     http://pear.php.net/package/PackageName
@@ -15,8 +15,8 @@ namespace Bookxchange\Bookxchange\Config;
 /**
  * Db class handle Database method
  * 
- * @category bookxchange
- * @package  bookxchange
+ * @category Bookxchange
+ * @package  Bookxchange
  * @author   Original Author <chaudharymilan996@gmail.com>
  * @license  http://www.php.net/license/3_01.txt  PHP License 3.01
  * @link     http://pear.php.net/package/PackageName

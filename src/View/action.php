@@ -1,5 +1,15 @@
 <?php
-
+/**
+ * Action class handle  action type.
+ *
+ * PHP version 8.1.3
+ *
+ * @category BookXchange.
+ * @package  BookXchange
+ * @author   Original Author <chaudharymilan996@gmail.com>
+ * @license  http://www.php.net/license/3_01.txt  PHP License 3.01
+ * @link     http://pear.php.net/package/PackageName
+ */
 require '../Include/allcontrollerobj.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['login'])) {
@@ -26,7 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $userAddress = $_POST['address'];
         $userEmail = $_POST['user_email'];
         $userPass = $_POST['user_pass'];
-        $user->getRegister($newUserImage, $userName, $userMobile, $userAddress, $userEmail, $userPass);
+        $user->getRegister(
+            $newUserImage, $userName, $userMobile,
+            $userAddress, $userEmail, $userPass
+        );
     }
     if (isset($_POST['forget'])) {
         $mobileNo = $_POST['mobile_no'];
@@ -74,14 +87,15 @@ if (isset($_GET['type']) && $_GET['type'] == 'bookdelete') {
     $bookId = $_POST['book_id'];
     $book->deletePersonalBook($bookId, $_SESSION['user_id']);
 }
-if(isset($_GET['type']) && $_GET['type'] == 'bookfeedback') {
+if (isset($_GET['type']) && $_GET['type'] == 'bookfeedback') {
     $bookId = $_POST['book_id'];
     $book->bookFeedback($bookId);
 }
-if(isset($_GET['type']) && $_GET['type'] == 'insertfeedback') {
+if (isset($_GET['type']) && $_GET['type'] == 'insertfeedback') {
     $bookId = $_POST['bookid'];
     $feedback = $_POST['feedback'];
     $userid = $_SESSION['user_id'];
     $userName = $_SESSION['user_name'];
     $book->insertBookFeedback($bookId, $feedback, $userid, $userName);
 }
+?>

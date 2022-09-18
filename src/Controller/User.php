@@ -1,20 +1,53 @@
 <?php
-
+/**
+ * User page that controls User.
+ *
+ * PHP version 8.1.3
+ *
+ * @category BookXchange.
+ * @package  BookXchange
+ * @author   Original Author <chaudharymilan996@gmail.com>
+ * @license  http://www.php.net/license/3_01.txt  PHP License 3.01
+ * @link     http://pear.php.net/package/PackageName
+ */
 namespace Bookxchange\Bookxchange\Controller;
 
 use Bookxchange\Bookxchange\Model\UserM;
 
+/**
+ * User class that controls Users.
+ *
+ * PHP version 8.1.3
+ *
+ * @category BookXchange.
+ * @package  BookXchange
+ * @author   Original Author <chaudharymilan996@gmail.com>
+ * @license  http://www.php.net/license/3_01.txt  PHP License 3.01
+ * @link     http://pear.php.net/package/PackageName
+ */
 class User
 {
     protected $userM;
-    public function __construct($baseurl)
+
+    /**
+     * Constructor for User.
+     */
+    public function __construct()
     {
         $this->userM = new UserM();
     }
-    public function logout(string $user_id)
+
+    /**
+     * Function logout.
+     * 
+     * @param $userId login user id.
+     *
+     * @return void nothing 
+     */
+    public function logout(string $userId):void
     {
         $token=null;
-        $updateToken = $this->userM->updateToken($user_id, $token);
+        $updateToken = $this->userM->updateToken($userId, $token);
         if ($updateToken == true) {
             session_unset();
             session_destroy();
@@ -26,7 +59,17 @@ class User
         }
         
     }
-    public function getLogin(string $phone, string $pass, int $id=0)
+
+    /**
+     * Function getLogin to get Login
+     * 
+     * @param $phone phone of user.
+     * @param $pass  password.
+     * @param $id    user id.
+     * 
+     * @return void nothing
+     */
+    public function getLogin(string $phone, string $pass, int $id=0):void
     {
         session_start();
         $isPhoneExit = $this->userM->isPhoneExit($phone);
@@ -35,7 +78,10 @@ class User
             if (password_verify($pass, $getLoginDetail['password'])) {
                 if ($getLoginDetail['token'] == null) {
                     $token = bin2hex(random_bytes(32));
-                    $updateToken = $this->userM->updateToken($getLoginDetail['id'], $token);
+                    $updateToken = $this->userM->updateToken(
+                        $getLoginDetail['id'],
+                        $token
+                    );
                     $_SESSION['user_id'] = $getLoginDetail['id'];
                     $_SESSION['token'] = $token;
                     $_SESSION['user_name'] = $getLoginDetail['user_name'];
@@ -54,6 +100,19 @@ class User
             header('location:../../index.php');
         }
     }
+
+    /**
+     * Function getRegister give register
+     * 
+     * @param $userImage   image for user.
+     * @param $userName    is user name.
+     * @param $userMobile  is user mobile.
+     * @param $userAddress is user address.
+     * @param $userEmail   is user email.
+     * @param $userPass    is password.
+     * 
+     * @return void nothing
+     */
     public function getRegister(
         $userImage,
         $userName,
@@ -61,13 +120,16 @@ class User
         $userAddress,
         $userEmail,
         $userPass
-    ) {
+    ):void {
         $isPhoneExit = $this->userM->isPhoneExit($userMobile);
         if ($isPhoneExit === false) {
             $isEmailExit = $this->userM->isEmailExit($userEmail);
             if ($isEmailExit === false) {
                 $hashPass = password_hash($userPass, PASSWORD_BCRYPT);
-                $isRegister = $this->userM->getRegister($userImage, $userName, $userMobile, $userAddress, $userEmail, $hashPass);
+                $isRegister = $this->userM->getRegister(
+                    $userImage,
+                    $userName, $userMobile, $userAddress, $userEmail, $hashPass
+                );
                 if ($isRegister > 0) {
                     $this->getLogin($userMobile, $userPass, $isRegister);
                 } else {
@@ -83,7 +145,15 @@ class User
             header('location:../../index.php');
         }
     }
-    public function getForgetPass(string $mobileNo)
+
+    /**
+     * Function getForgetPass give forget control.
+     * 
+     * @param $mobileNo is mobile number of user.
+     * 
+     * @return void nothing
+     */
+    public function getForgetPass(string $mobileNo):void
     {
         $isPhoneExit = $this->userM->isPhoneExit($mobileNo);
         if ($isPhoneExit === true) {
@@ -93,7 +163,7 @@ class User
             $_SESSION['otpExpire'] = $otpExpire;
             $_SESSION['mobile'] = $mobileNo;
             $myfile = fopen("otp.txt", "w") or die("Unable to open file!");
-            fwrite($myfile, $otp);
+            fwrite($myfile, (string) $otp);
             fclose($myfile);
             $_SESSION['msg'] = "Otp sent..";
             header('location:otpverify.php');
@@ -102,10 +172,20 @@ class User
             header('location:../../index.php');
         }
     }
-    public function updatePassword(string $pass, string $mobile)
+
+    /**
+     * Function updatePassword update pass.
+     * 
+     * @param $pass   is password.
+     * @param $mobile is mobile no.
+     * 
+     * @return bool true or false.
+     */
+    public function updatePassword(string $pass, string $mobile):bool
     {
         $hashPass = password_hash($pass, PASSWORD_BCRYPT);
         $updatePass = $this->userM->updatePassword($hashPass, $mobile);
         return $updatePass;
     }
 }
+?>
