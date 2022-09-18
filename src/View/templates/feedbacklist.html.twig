@@ -1,0 +1,13 @@
+{% for feedback in allbookfeedback %}
+<div class="feed-div">  
+<h6>{{ feedback.feedback }}</h6>
+<span class="commenter">By <i>{{ feedback.commenter_name }}</i></span>
+</div>  
+{% endfor %}
+<p id="feedbackmsg"></p>
+<style>
+    .feed-div{
+        border:1px solid green;
+        border-radius: 10px;
+    }
+</style>

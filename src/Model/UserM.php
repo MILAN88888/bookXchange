@@ -50,14 +50,14 @@ class UserM
         $stmt->close();
         return $res;
     }
-    public function getRegister($user_image, $user_name, $user_mobile, $user_address, $user_email, $user_pass): int
+    public function getRegister($userImage, $userName, $userMobile, $userAddress, $userEmail, $userPass): int
     {
         $token = '';
         $usertype = 0;
         $status = 'active';
         $sql = "INSERT INTO `register` (image,user_name,mobile_no,address,email,password,status,token,user_type) values(?,?,?,?,?,?,?,?,?)";
         $stmt = $this->_conn->prepare($sql);
-        $stmt->bind_param("sssssssss",$user_image, $user_name, $user_mobile, $user_address, $user_email,  $user_pass, $status, $token, $usertype);
+        $stmt->bind_param("sssssssss",$userImage, $userName, $userMobile, $userAddress, $userEmail,  $userPass, $status, $token, $usertype);
         $stmt->execute();
         if ($stmt->affected_rows > 0 )
         {
@@ -68,11 +68,11 @@ class UserM
         $stmt->close();
         return $res;
     }
-    public function updateToken(string $user_id, $token):bool
+    public function updateToken(string $userId, $token):bool
     {
         $sql = "UPDATE `register` SET token=? WHERE id = ?";
         $stmt = $this->_conn->prepare($sql);
-        $stmt->bind_param("ss", $token, $user_id);
+        $stmt->bind_param("ss", $token, $userId);
         $stmt->execute();
         if ($stmt->affected_rows === 0 ) {
             $res = false;

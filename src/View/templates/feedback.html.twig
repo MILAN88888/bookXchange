@@ -1,0 +1,54 @@
+<button id="close-feedback">x</button>
+  <h4>{{bookfeedback.book_name}}</h4>
+  <img src="../Upload/Books/{{ bookfeedback.image }}" width="50px" height="50px"/>
+  <p><b>Book Name</b> : {{bookfeedback.book_name}}<br>
+    <b>Description</b>: {{bookfeedback.description}}<br>
+    <b>Upload By</b>:<a href="#" id="ownerdetail"> {{bookfeedback.user_name}}</a><br>
+    <b>Rating</b>: {{bookfeedback.rating}}
+  </p>
+  <form id="feedback-form">
+    <input hidden type="text" value="{{book.id}}" name="book_id">
+    <input type="text" id="feedback" name="feedback" placeholder="enter feedback" required>
+    <input type="submit" name="feed-submit" value="feedback">
+  </form>
+<div id="allfeedback-div">
+   
+</div>
+<div id="ownerdetail-div">
+  <img src="../Upload/Users/{{bookfeedback.user_image}}" width="50px" height="50x" style="border-radius: 20px;" />
+<table>
+  <tr><th>Name</th><td>{{bookfeedback.user_name}}</td></tr>
+  <tr><th>Phone</th><td>{{bookfeedback.mobile_no}}</td></td></tr>
+  <tr><th>Address</th><td>{{bookfeedback.address}}</td></td></tr>
+  <tr><th>Email</th><td>{{bookfeedback.email}}</td></td></tr>
+</table>
+</div>
+  <style>
+    #close-feedback {
+        float: right;
+        background-color: lightcoral;
+        border-radius: 20px;
+      }
+      #close-feedback:hover{
+        background-color: lightgreen;
+      }
+      #ownerdetail-div {
+        position: absolute;
+        left: 50%;
+        width: auto;
+        height: 150px;
+        background-color: rgb(80, 224, 36);
+        transform: translate(-20%, -180%);
+        display: none;
+        border-radius: 20px;
+        padding: 10px;
+      }
+  </style>
+  <script>
+    $(document).find('#close-feedback').click(function(){
+      $('#bookfeedback-div').hide(800);
+  });
+  $(document).find('#ownerdetail').click(function(){
+    $(document).find('#ownerdetail-div').toggle();
+  })
+  </script>

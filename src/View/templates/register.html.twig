@@ -1,16 +1,20 @@
 <div class="register-div" id="register-div">
 <form id="register-form" action="src/View/action.php" method="post" enctype="multipart/form-data">
-   <input type="file" placeholder="choose profile picture" name="user_img">
-   <input type="text" name="user_name" placeholder="Name" required>
-   <input type="text" name="user_mobile_no" placeholder="Mobile No." required>
-   <textarea  name="address" placeholder="Address" required ></textarea>
-   <input type="email" name="user_email" placeholder="Email" required>
-   <input type="password" name="user_pass" placeholder="Password" required>
+   <input type="file" id="user_img" placeholder="choose profile picture" name="user_img">
+   <input type="text" name="user_name" placeholder="Name" >
+   <input type="text" name="user_mobile_no" placeholder="Mobile No." >
+   <textarea  name="address" placeholder="Address"  ></textarea>
+   <input type="email" name="user_email" placeholder="Email" >
+   <input type="password" name="user_pass" placeholder="Password">
    <input type="submit" name="register" value="Register">
 </form>
 </div>
 <style>
     div{
-        width: 300px;
+        width: 250px;
+    }
+    .error {
+        color:red;
     }
 </style>
+<script src="{{ baseurl }}js/register.js"></script>

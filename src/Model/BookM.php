@@ -104,4 +104,49 @@ class BookM
         }
         return $res;
     }
+    public function bookFeedback(int $bookid):array
+    {
+        $sql = "SELECT b.book_name,b.description,b.image, r.user_name, r.rating, r.image as user_image,r.mobile_no, r.address, r.email
+        FROM books as b
+        INNER JOIN register as r on r.id = b.owner_id
+        WHERE b.id = ?";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bind_param("i", $bookid);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        if ($res->num_rows === 0) {
+            exit('No book details present');
+        }
+        $arr = $res->fetch_assoc();
+        $stmt->close();
+        return $arr;
+    }
+    public function allBookFeedback(int $bookId):array
+    {
+        $sql = "SELECT * FROM feedback WHERE book_id = ?";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bind_param("i", $bookId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        // if($res->num_rows === 0)
+        // {
+        //     exit('No Feed Backs');
+        // }
+        $arr =$res->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return $arr;
+    }
+    public function insertBookFeedback(int $bookId, string $feedback, int $userid, string $userName):bool
+    {
+        $sql = "INSERT INTO feedback (commenter_name, feedback, user_id, book_id) VALUES (?,?,?,?)";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bind_param("ssii", $userName, $feedback, $userid, $bookId);
+        $stmt->execute();
+        if ($stmt->affected_rows > 0) {
+            $res = true;
+        } else {
+            $res = false;
+        }
+        return $res;
+    }
 }

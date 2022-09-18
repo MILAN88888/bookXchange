@@ -8,17 +8,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user->getLogin($phone, $pass);
     }
     if (isset($_POST['register'])) {
-        $user_image = 'user image';
-        $user_name = $_POST['user_name'];
-        $user_mobile = $_POST['user_mobile_no'];
-        $user_address = $_POST['address'];
-        $user_email = $_POST['user_email'];
-        $user_pass = $_POST['user_pass'];
-        $user->getRegister($user_image, $user_name, $user_mobile, $user_address, $user_email, $user_pass);
+        $newUserImage = 'user image';
+        if (isset($_FILES['user_img'])) {
+            $userImage = $_FILES['user_img']['name'];
+            $userImageTemp = $_FILES['user_img']['tmp_name'];
+            $imgType = strtolower(pathinfo($userImage, PATHINFO_EXTENSION));
+            $randomno = rand(0, 100000);
+            $generateName = 'user'.date('Ymd').$randomno;
+            $generateUserImage = $generateName.'.'.$imgType;
+            $desImage='../Upload/Users/'.$generateUserImage;
+            move_uploaded_file($userImageTemp, $desImage);
+            $newUserImage = $generateUserImage;
+        }
+        
+        $userName = $_POST['user_name'];
+        $userMobile = $_POST['user_mobile_no'];
+        $userAddress = $_POST['address'];
+        $userEmail = $_POST['user_email'];
+        $userPass = $_POST['user_pass'];
+        $user->getRegister($newUserImage, $userName, $userMobile, $userAddress, $userEmail, $userPass);
     }
     if (isset($_POST['forget'])) {
-        $mobile_no = $_POST['mobile_no'];
-        $user->getForgetPass($mobile_no);
+        $mobileNo = $_POST['mobile_no'];
+        $user->getForgetPass($mobileNo);
     }
 }
 if (isset($_GET['type']) && $_GET['type'] == 'bookedit') {
@@ -61,4 +73,15 @@ if (isset($_GET['type']) && $_GET['type'] == 'bookupdate') {
 if (isset($_GET['type']) && $_GET['type'] == 'bookdelete') {
     $bookId = $_POST['book_id'];
     $book->deletePersonalBook($bookId, $_SESSION['user_id']);
+}
+if(isset($_GET['type']) && $_GET['type'] == 'bookfeedback') {
+    $bookId = $_POST['book_id'];
+    $book->bookFeedback($bookId);
+}
+if(isset($_GET['type']) && $_GET['type'] == 'insertfeedback') {
+    $bookId = $_POST['bookid'];
+    $feedback = $_POST['feedback'];
+    $userid = $_SESSION['user_id'];
+    $userName = $_SESSION['user_name'];
+    $book->insertBookFeedback($bookId, $feedback, $userid, $userName);
 }

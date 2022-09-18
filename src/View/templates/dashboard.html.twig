@@ -1,16 +1,31 @@
-
 {% for book in books %}
 <div style="display: inline-block">
-<div class="row d-flex  mx-1">
-<div class="card" style="width: 15rem;">
-    <img src="../Upload/Books/{{ book.image }}" width="100px" height="100px" class="card-img-top" alt="...">
-    <div class="card-body">
-      <h5 class="card-title">{{ book.book_name }}</h5>
-      <p class="card-text">Author : {{ book.author}} <br>Edition : {{ book.edition }}<br> Status : {{ book.status }} <br> Rating : {{ book.rating }}</p>
-      <a href="#" class="btn btn-primary">Details</a>
+  <div class="row d-flex  mx-1">
+    <div class="card" style="width: 15rem;">
+      <img src="../Upload/Books/{{ book.image }}" width="100px" height="100px" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">{{ book.book_name }}</h5>
+        <p class="card-text">Author : {{ book.author}} <br>Edition : {{ book.edition }}<br> Status : {{ book.status }}
+          <br> Rating : {{ book.rating }}</p>
+        <a href="#" onclick="bookdetails('{{ book.id }}')" class="btn btn-primary">Details</a>
+      </div>
     </div>
   </div>
 </div>
-</div>
 {% endfor %}
-
+<div id="bookfeedback-div">
+  
+</div>
+<script src="{{ baseurl }}js/dashboard.js"></script>
+<style>
+  #bookfeedback-div {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -80%);
+    border-radius: 5px;
+    background-color: #63f9f6;
+    width: 40%;
+    height: 400px;
+    display: none;
+  }
+</style>

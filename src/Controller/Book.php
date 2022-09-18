@@ -107,4 +107,29 @@ class Book
         }
         echo json_encode($response);
     }
+   public function bookFeedback($bookid)
+   {
+    $feedback = $this->bookM->bookFeedback($bookid);
+    $allfeedback = $this->bookM->allBookFeedback($bookid);
+    $bookFeedback = $this->_twig->render('feedback.html.twig',['bookfeedback'=>$feedback]);
+    $allBookFeedback = $this->_twig->render('feedbacklist.html.twig',['allbookfeedback'=>$allfeedback]);
+    $res = ['html1'=>$bookFeedback, 'html2'=>$allBookFeedback];
+    echo json_encode($res);
+   }
+   public function insertBookFeedback(int $bookId, string $feedback, int $userid, string $userName)
+   {
+        $feedback = $this->bookM->insertBookFeedback($bookId, $feedback, $userid, $userName);
+        if($feedback == true) {
+            $allfeedback = $this->bookM->allBookFeedback($bookId);
+            $allBookFeedback = $this->_twig->render('feedbacklist.html.twig',['allbookfeedback'=>$allfeedback]);
+            $feedbackMsg = "success";
+            $res = ['feedbackhtml'=>$allBookFeedback, 'feedbackmsg'=>$feedbackMsg];
+        } else {
+            $allfeedback = $this->bookM->allBookFeedback($bookId);
+            $allBookFeedback = $this->_twig->render('feedbacklist.html.twig',['allbookfeedback'=>$allfeedback]);
+            $feedbackMsg = "failed!";
+            $res = ['feedbackhtml'=>$allBookFeedback, 'feedbackmsg'=>$feedbackMsg];
+        }
+        echo json_encode($res);
+   }
 }

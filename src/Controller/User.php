@@ -38,6 +38,7 @@ class User
                     $updateToken = $this->userM->updateToken($getLoginDetail['id'], $token);
                     $_SESSION['user_id'] = $getLoginDetail['id'];
                     $_SESSION['token'] = $token;
+                    $_SESSION['user_name'] = $getLoginDetail['user_name'];
                     $_SESSION['msg'] = "Login Successfully!";
                     header('location:dashboard.php');
                 } else {
@@ -54,21 +55,21 @@ class User
         }
     }
     public function getRegister(
-        $user_image,
-        $user_name,
-        $user_mobile,
-        $user_address,
-        $user_email,
-        $user_pass
+        $userImage,
+        $userName,
+        $userMobile,
+        $userAddress,
+        $userEmail,
+        $userPass
     ) {
-        $isPhoneExit = $this->userM->isPhoneExit($user_mobile);
+        $isPhoneExit = $this->userM->isPhoneExit($userMobile);
         if ($isPhoneExit === false) {
-            $isEmailExit = $this->userM->isEmailExit($user_email);
+            $isEmailExit = $this->userM->isEmailExit($userEmail);
             if ($isEmailExit === false) {
-                $hashPass = password_hash($user_pass, PASSWORD_BCRYPT);
-                $isRegister = $this->userM->getRegister($user_image, $user_name, $user_mobile, $user_address, $user_email, $hashPass);
+                $hashPass = password_hash($userPass, PASSWORD_BCRYPT);
+                $isRegister = $this->userM->getRegister($userImage, $userName, $userMobile, $userAddress, $userEmail, $hashPass);
                 if ($isRegister > 0) {
-                    $this->getLogin($user_mobile, $user_pass, $isRegister);
+                    $this->getLogin($userMobile, $userPass, $isRegister);
                 } else {
                     $_SESSION['fail'] = "Registration failed!";
                     header('location:../../index.php');
@@ -82,15 +83,15 @@ class User
             header('location:../../index.php');
         }
     }
-    public function getForgetPass(string $mobile_no)
+    public function getForgetPass(string $mobileNo)
     {
-        $isPhoneExit = $this->userM->isPhoneExit($mobile_no);
+        $isPhoneExit = $this->userM->isPhoneExit($mobileNo);
         if ($isPhoneExit === true) {
             $otp = mt_rand(1111, 9999);
             $otpExpire = time()+120;
             $_SESSION['otp'] = $otp;
             $_SESSION['otpExpire'] = $otpExpire;
-            $_SESSION['mobile'] = $mobile_no;
+            $_SESSION['mobile'] = $mobileNo;
             $myfile = fopen("otp.txt", "w") or die("Unable to open file!");
             fwrite($myfile, $otp);
             fclose($myfile);
