@@ -6,7 +6,8 @@
       <div class="card-body">
         <h5 class="card-title">{{ book.book_name }}</h5>
         <p class="card-text">Author : {{ book.author}} <br>Edition : {{ book.edition }}<br> Status : {{ book.status }}
-          <br> Rating : {{ book.rating }}</p>
+          <br> Rating : {{ book.rating }}
+        </p>
         <a href="#" onclick="bookdetails('{{ book.id }}')" class="btn btn-primary">Details</a>
       </div>
     </div>
@@ -14,7 +15,7 @@
 </div>
 {% endfor %}
 <div id="bookfeedback-div">
-  
+
 </div>
 <script src="{{ baseurl }}js/dashboard.js"></script>
 <style>

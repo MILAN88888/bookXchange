@@ -20,30 +20,92 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['register'])) {
         $newUserImage = 'user image';
         if (isset($_FILES['user_img'])) {
-            $userImage = $_FILES['user_img']['name'];
-            $userImageTemp = $_FILES['user_img']['tmp_name'];
-            $imgType = strtolower(pathinfo($userImage, PATHINFO_EXTENSION));
-            $randomno = rand(0, 100000);
-            $generateName = 'user'.date('Ymd').$randomno;
-            $generateUserImage = $generateName.'.'.$imgType;
-            $desImage='../Upload/Users/'.$generateUserImage;
-            move_uploaded_file($userImageTemp, $desImage);
-            $newUserImage = $generateUserImage;
+            if ($_FILES['user_img']['size']>0) {
+                $userImage = $_FILES['user_img']['name'];
+                $userImageTemp = $_FILES['user_img']['tmp_name'];
+                $imgType = strtolower(pathinfo($userImage, PATHINFO_EXTENSION));
+                $randomno = rand(0, 100000);
+                $generateName = 'user'.date('Ymd').$randomno;
+                $generateUserImage = $generateName.'.'.$imgType;
+                $desImage='../Upload/Users/'.$generateUserImage;
+                move_uploaded_file($userImageTemp, $desImage);
+                $newUserImage = $generateUserImage;
+            }
         }
-        
+
         $userName = $_POST['user_name'];
         $userMobile = $_POST['user_mobile_no'];
         $userAddress = $_POST['address'];
         $userEmail = $_POST['user_email'];
         $userPass = $_POST['user_pass'];
         $user->getRegister(
-            $newUserImage, $userName, $userMobile,
-            $userAddress, $userEmail, $userPass
+            $newUserImage,
+            $userName,
+            $userMobile,
+            $userAddress,
+            $userEmail,
+            $userPass
         );
     }
     if (isset($_POST['forget'])) {
         $mobileNo = $_POST['mobile_no'];
         $user->getForgetPass($mobileNo);
+    }
+    if (isset($_POST['updateprofile'])) {
+        $oldImage = $_POST['old_image'];
+
+        $oldNumber = $_POST['old_number'];
+        $oldEmail = $_POST['old_email'];
+        $newUserImage = $oldImage;
+        if (isset($_FILES['newimage'])) {
+            if ($_FILES['newimage']['size']>0) {
+                $newUserImg = $_FILES['newimage']['name'];
+                $imgType = strtolower(pathinfo($newUserImg, PATHINFO_EXTENSION));
+                $randomno = rand(0, 100000);
+                $generateName = 'user'.date('Ymd').$randomno;
+                $generateUserImage = $generateName.'.'.$imgType;
+                $desImage='../Upload/Users/'.$generateUserImage;
+                move_uploaded_file($_FILES['newimage']['tmp_name'], $desImage);
+                $newUserImage = $generateUserImage;
+            }
+        }
+        $newUserName = $_POST['user_name'];
+        $newUserNumber = $_POST['user_phone'];
+        $newUserAddress = $_POST['user_address'];
+        $newUserEmail = $_POST['user_email'];
+        if ($newUserNumber == $oldNumber) {
+            $newUserNumber = $oldNumber;
+        } else {
+            $isNumberExit = $user->isNumberExit($newUserNumber);
+            if ($isNumberExit == true) {
+                $_SESSION['msg'] = "Number is aleady exit";
+                header('location:profile.php');
+            }
+        }
+        if ($newUserEmail == $oldEmail) {
+            $newUserEmail = $oldEmail;
+        } else {
+            $isEmailExit = $user->isEmailExit($newUserEmail);
+            if ($isEmailExit == true) {
+                $_SESSION['msg'] = "Email is aleady exit";
+                header('location:profile.php');
+            }
+        }
+        $isProfileUpdate = $user->updateProfile(
+            $newUserImage,
+            $newUserName,
+            $newUserNumber,
+            $newUserAddress,
+            $newUserEmail,
+            $_SESSION['user_id']
+        );
+        if ($isProfileUpdate == true) {
+            $_SESSION['msg'] = "Updated successfully!";
+            header('location:profile.php');
+        } else {
+            $_SESSION['msg'] = "Update failed!";
+            header('location:profile.php');
+        }
     }
 }
 if (isset($_GET['type']) && $_GET['type'] == 'bookedit') {
@@ -98,4 +160,3 @@ if (isset($_GET['type']) && $_GET['type'] == 'insertfeedback') {
     $userName = $_SESSION['user_name'];
     $book->insertBookFeedback($bookId, $feedback, $userid, $userName);
 }
-?>

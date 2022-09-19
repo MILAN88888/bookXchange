@@ -10,7 +10,9 @@
  * @license  http://www.php.net/license/3_01.txt  PHP License 3.01
  * @link     http://pear.php.net/package/PackageName
  */
+
 namespace Bookxchange\Bookxchange\Model;
+
 use Bookxchange\Bookxchange\Config\DbConnection;
 
 /**
@@ -26,13 +28,11 @@ use Bookxchange\Bookxchange\Config\DbConnection;
  */
 class UserM
 {
-
-   
     private $_conn;
 
-     /**
-      * Constructor for User.
-      */
+    /**
+     * Constructor for User.
+     */
     public function __construct()
     {
         $db = new DbConnection();
@@ -41,12 +41,12 @@ class UserM
 
     /**
      * Function isEmailExit check email.
-     * 
+     *
      * @param $email email.
-     * 
+     *
      * @return bool true or false.
      */
-    public function isEmailExit(string $email):bool
+    public function isEmailExit(string $email): bool
     {
         $sql = "SELECT id FROM  `register` WHERE `email`=?";
         $stmt = $this->_conn->prepare($sql);
@@ -59,17 +59,17 @@ class UserM
             $res = true;
         }
         $stmt->close();
-        return $res;  
+        return $res;
     }
 
     /**
      * Function isPhoneExit check phone
-     * 
+     *
      * @param $phone phone number
-     * 
+     *
      * @return bool true or false
      */
-    public function isPhoneExit(string $phone):bool
+    public function isPhoneExit(string $phone): bool
     {
         $sql = "SELECT id FROM  `register` WHERE mobile_no=?";
         $stmt = $this->_conn->prepare($sql);
@@ -87,19 +87,19 @@ class UserM
 
     /**
      * Function getLogin get login
-     * 
+     *
      * @param $phone phone number
-     * 
+     *
      * @return array all details
      */
-    public function getLogin(string $phone):array
+    public function getLogin(string $phone): array
     {
         $sql = "SELECT * FROM `register` WHERE mobile_no=?";
         $stmt = $this->_conn->prepare($sql);
         $stmt->bind_param("s", $phone);
         $stmt->execute();
         $arr = $stmt->get_result();
-        if ($arr->num_rows === 0) { 
+        if ($arr->num_rows === 0) {
             exit('No row selected');
         }
         $res = $arr->fetch_assoc();
@@ -109,18 +109,23 @@ class UserM
 
      /**
       * Function getRegister give register
-      * 
+      *
       * @param $userImage   image for user.
       * @param $userName    is user name.
       * @param $userMobile  is user mobile.
       * @param $userAddress is user address.
       * @param $userEmail   is user email.
       * @param $userPass    is password.
-      * 
+      *
       * @return int insert id.
       */
-    public function getRegister($userImage, $userName,
-        $userMobile, $userAddress, $userEmail, $userPass
+    public function getRegister(
+        $userImage,
+        $userName,
+        $userMobile,
+        $userAddress,
+        $userEmail,
+        $userPass
     ): int {
         $token = '';
         $usertype = 0;
@@ -129,11 +134,19 @@ class UserM
         email,password,status,token,user_type) values(?,?,?,?,?,?,?,?,?)";
         $stmt = $this->_conn->prepare($sql);
         $stmt->bind_param(
-            "sssssssss", $userImage, $userName, $userMobile,
-            $userAddress, $userEmail,  $userPass, $status, $token, $usertype
+            "sssssssss",
+            $userImage,
+            $userName,
+            $userMobile,
+            $userAddress,
+            $userEmail,
+            $userPass,
+            $status,
+            $token,
+            $usertype
         );
         $stmt->execute();
-        if ($stmt->affected_rows > 0 ) {
+        if ($stmt->affected_rows > 0) {
             $res = $this->_conn->insert_id;
         } else {
             $res = 0;
@@ -144,19 +157,19 @@ class UserM
 
     /**
      * Function updateToken update token
-     * 
+     *
      * @param $userId user id
      * @param $token  token for user
-     * 
+     *
      * @return bool true or false
      */
-    public function updateToken(string $userId, $token):bool
+    public function updateToken(string $userId, $token): bool
     {
         $sql = "UPDATE `register` SET token=? WHERE id = ?";
         $stmt = $this->_conn->prepare($sql);
         $stmt->bind_param("ss", $token, $userId);
         $stmt->execute();
-        if ($stmt->affected_rows === 0 ) {
+        if ($stmt->affected_rows === 0) {
             $res = false;
         } else {
             $res = true;
@@ -166,19 +179,19 @@ class UserM
 
     /**
      * Function updatePassword
-     * 
+     *
      * @param $pass   password.
      * @param $mobile mobile number.
-     * 
+     *
      * @return bool true or false
      */
-    public function updatePassword(string $pass, string $mobile):bool
+    public function updatePassword(string $pass, string $mobile): bool
     {
         $sql = "UPDATE `register` SET password=? WHERE mobile_no = ?";
         $stmt = $this->_conn->prepare($sql);
         $stmt->bind_param("ss", $pass, $mobile);
         $stmt->execute();
-        if ($stmt->affected_rows === 0 ) {
+        if ($stmt->affected_rows === 0) {
             $res = false;
         } else {
             $res = true;
@@ -186,6 +199,67 @@ class UserM
         $stmt->close();
         return $res;
     }
-           
+
+    /**
+     * Function userProfile give details of user.
+     *
+     * @param $userId user id.
+     *
+     * @return array list of detail of user.
+     */
+    public function userProfile(int $userId): array
+    {
+        $sql = "SELECT * FROM `register` WHERE id=?";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows === 0) {
+            exit('no row selected');
+        }
+        $arr = $result->fetch_assoc();
+        return $arr;
+    }
+
+    /**
+     * Function updateProfile
+     *
+     * @param $newUserImage
+     * @param $newUserName name of user
+     * @param $newUserNumber number of user.
+     * @param $newUserAddress address of user.
+     * @param $newUserEmail email of user.
+     * @param $userId is id of user.
+     *
+     * @return bool true or false.
+     */
+    public function updateProfile(
+        string $newUserImage,
+        string $newUserName,
+        string $newUserNumber,
+        string $newUserAddress,
+        string $newUserEmail,
+        int $userId
+    )
+    {
+        $sql = "UPDATE `register` SET image=?, user_name=?, mobile_no=?, address=?,email=? WHERE id=?";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bind_param(
+            "sssssi",
+            $newUserImage,
+            $newUserName,
+            $newUserNumber,
+            $newUserAddress,
+            $newUserEmail,
+            $userId
+        );
+        $stmt->execute();
+        if ($stmt->affected_rows === 0) {
+            $res = false;
+        } else {
+            $res = true;
+        }
+        $stmt->close();
+        return $res;
+    }
 }
-?>

@@ -21,7 +21,7 @@ session_start();
 $base = new Baseurl();
 $baseurl = $base->getBaseurl(); 
 $book = new Book($baseurl);
-$user = new User();
+$user = new User($baseurl);
 $home = new Home($baseurl);
 $dashboard = new Dashboard($baseurl);
 ?>

@@ -38,7 +38,7 @@ function myedit(str) {
                         url: 'action.php?type=bookupdate',
                         type: 'post',
                         data: formData,
-                        dataType:'json',
+                        dataType: 'json',
                         enctype: 'multipart/form-data',
                         processData: false,
                         contentType: false,
@@ -140,17 +140,15 @@ $(document).ready(function () {
 
 });
 
-function bookdelete(str)
-{
+function bookdelete(str) {
     var conf = confirm('Are you sure want to delete this book!!');
-    if( conf == true) {
+    if (conf == true) {
         $.ajax({
-            url:'action.php?type=bookdelete',
-            type:'post',
-            dataType:'json',
-            data:{'book_id':str},
-            success: function(res)
-            {
+            url: 'action.php?type=bookdelete',
+            type: 'post',
+            dataType: 'json',
+            data: { 'book_id': str },
+            success: function (res) {
                 $(document).find('#edit-msg').html(res.delete);
                 $(document).find('#personalbook-div').html(res.html);
             }
