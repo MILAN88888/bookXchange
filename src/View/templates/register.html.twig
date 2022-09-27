@@ -1,12 +1,13 @@
 <div class="register-div" id="register-div">
+    <b>______Register Form______</b><br><br>
     <form id="register-form" action="src/View/action.php" method="post" enctype="multipart/form-data">
         <input type="file" id="user_img" placeholder="choose profile picture" name="user_img">
         <input type="text" name="user_name" placeholder="Name">
         <input type="text" name="user_mobile_no" placeholder="Mobile No.">
         <textarea name="address" placeholder="Address"></textarea>
         <input type="email" name="user_email" placeholder="Email">
-        <input type="password" name="user_pass" placeholder="Password">
-        <input type="submit" name="register" value="Register">
+        <input type="password" name="user_pass" placeholder="Password"><br><br>
+        <input type="submit" name="register" value="submit">
     </form>
 </div>
 <style>
@@ -16,6 +17,10 @@
 
     .error {
         color: red;
+    }
+    .register-div{
+        margin-left: 35%;
+        margin-top:60px;
     }
 </style>
 <script src="{{ baseurl }}js/register.js"></script>

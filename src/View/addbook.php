@@ -11,7 +11,7 @@
  * @link     http://pear.php.net/package/PackageName
  */
 require '../Include/common.php';
-echo $book->addBooK();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['addbook'])) {
         $bookImage = $_FILES['book_image']['name'];
@@ -43,12 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $ownerId
         );
         if ($addNewBook === true) {
-            header('location:dashboard.php');
-            $_SESSION['msg'] = "New Book Added!";
+            $_SESSION['msg'] = "You uploaded $bookName";
+            header('location:personal.php');
         } else {
+           
+            $_SESSION['msg'] = "No Book uploaded!";
             header('location:addbook.php');
-            $_SESSION['msg'] = "No Book Added!";
         }
     }
 }
+echo $book->addBooK();
 ?>

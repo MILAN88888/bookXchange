@@ -11,5 +11,6 @@
  * @link     http://pear.php.net/package/PackageName
  */
 require '../Include/common.php';
+
 echo $book->getPersonalBook($_SESSION['user_id']);
 ?>

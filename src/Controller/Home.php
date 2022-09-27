@@ -15,6 +15,7 @@ namespace Bookxchange\Bookxchange\Controller;
 
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use Bookxchange\Bookxchange\Model\BookM;
 
 /**
  * Home Class controls home.
@@ -29,10 +30,9 @@ use Twig\Loader\FilesystemLoader;
  */
 class Home
 {
-
- 
     private $_twig;
     private $_loader;
+    protected $bookM;
 
     /**
      * Constructor for home class.
@@ -44,6 +44,7 @@ class Home
         $this->_loader = new FilesystemLoader(__DIR__.'/../View/templates');
         $this->_twig = new Environment($this->_loader);
         $this->_twig->addGlobal('baseurl', $baseurl);
+        $this->bookM = new BookM();
     }
 
     /**
@@ -54,6 +55,12 @@ class Home
     public function getHome()
     {
         return $this->_twig->render('index.html.twig');
+    }
+
+    public function getHome2()
+    {
+        $bookRecentBook = $this->bookM->getRecentBook();
+        return $this->_twig->render('index2.html.twig',['bookList'=>$bookRecentBook]);
     }
 
     /**

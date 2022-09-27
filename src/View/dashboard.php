@@ -11,5 +11,16 @@
  * @link     http://pear.php.net/package/PackageName
  */
 require '../Include/common.php';
-echo $dashboard->getDashboard();
+    $perPage = 6;
+	$start = 0;
+	if (isset($_GET['start']))
+	{
+		$start = $_GET['start'];
+		$currentPage = $start;
+		$start--;
+		$start = $start * $perPage;
+	}
+    $record = $dashboard->getNumOfBooks();
+	$pagi = ceil($record/$perPage);
+    echo $dashboard->getDashboard($start, $perPage, $pagi);
 ?>

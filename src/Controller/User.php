@@ -94,7 +94,8 @@ class User
                     $_SESSION['user_id'] = $getLoginDetail['id'];
                     $_SESSION['token'] = $token;
                     $_SESSION['user_name'] = $getLoginDetail['user_name'];
-                    $_SESSION['msg'] = "Login Successfully!";
+                    $loginName = $_SESSION['user_name'];
+                    $_SESSION['msg'] = "Welcome $loginName";
                     header('location:dashboard.php');
                 } else {
                     $_SESSION['fail'] = "No token!";

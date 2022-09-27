@@ -10,6 +10,7 @@
  * @license  http://www.php.net/license/3_01.txt  PHP License 3.01
  * @link     http://pear.php.net/package/PackageName
  */
+
 require '../Include/allcontrollerobj.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['login'])) {
@@ -73,37 +74,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $newUserNumber = $_POST['user_phone'];
         $newUserAddress = $_POST['user_address'];
         $newUserEmail = $_POST['user_email'];
+        $ok = 1;
         if ($newUserNumber == $oldNumber) {
             $newUserNumber = $oldNumber;
         } else {
             $isNumberExit = $user->isNumberExit($newUserNumber);
-            if ($isNumberExit == true) {
+
+            if ($isNumberExit == 1) {
                 $_SESSION['msg'] = "Number is aleady exit";
-                header('location:profile.php');
+                $ok = 0;
             }
         }
         if ($newUserEmail == $oldEmail) {
             $newUserEmail = $oldEmail;
         } else {
             $isEmailExit = $user->isEmailExit($newUserEmail);
-            if ($isEmailExit == true) {
+            if ($isEmailExit == 1) {
                 $_SESSION['msg'] = "Email is aleady exit";
-                header('location:profile.php');
+                $ok = 0;
             }
         }
-        $isProfileUpdate = $user->updateProfile(
-            $newUserImage,
-            $newUserName,
-            $newUserNumber,
-            $newUserAddress,
-            $newUserEmail,
-            $_SESSION['user_id']
-        );
-        if ($isProfileUpdate == true) {
-            $_SESSION['msg'] = "Updated successfully!";
-            header('location:profile.php');
+        if ($ok == 1) {
+            $isProfileUpdate = $user->updateProfile(
+                $newUserImage,
+                $newUserName,
+                $newUserNumber,
+                $newUserAddress,
+                $newUserEmail,
+                $_SESSION['user_id']
+            );
+            if ($isProfileUpdate == true) {
+                $_SESSION['msg'] = "Updated successfully!";
+                header('location:profile.php');
+            } else {
+                $_SESSION['msg'] = "No Update";
+                header('location:profile.php');
+            }
         } else {
-            $_SESSION['msg'] = "Update failed!";
             header('location:profile.php');
         }
     }

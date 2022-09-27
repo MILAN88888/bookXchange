@@ -17,7 +17,6 @@ use Bookxchange\Bookxchange\Controller\Book;
 use Bookxchange\Bookxchange\Controller\Home;
 use Bookxchange\Bookxchange\Controller\Dashboard;
 session_start();
-
 $base = new Baseurl();
 $baseurl = $base->getBaseurl(); 
 $book = new Book($baseurl);

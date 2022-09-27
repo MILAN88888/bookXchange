@@ -167,7 +167,7 @@ class Book
                 'personalbook.html.twig', 
                 ['personalBooks'=>$personalBooks]
             );     
-            $edit = "Edited Successfully!";
+            $edit = "You edited $bookName!";
             $response = ['edit'=>$edit, 'html'=>$personalHtml];
         } else {
             $personalBooks = $this->bookM->getPersonalBook($ownerId);
@@ -190,15 +190,17 @@ class Book
      * @return void array in json format.
      */
     public function deletePersonalBook(int $bookId, int $ownerId)
-    {
+    {   
+        $bookDetails = $this->bookM->getBookDetails($bookId);
         $deleteBook = $this->bookM->deletePersonalBook($bookId);
         if ($deleteBook === true) {
             $personalBooks = $this->bookM->getPersonalBook($ownerId);
             $personalHtml = $this->_twig->render(
                 'personalbook.html.twig',
                 ['personalBooks'=>$personalBooks]
-            );     
-            $delete = "Deleted Successfully!";
+            );
+            $bookName = $bookDetails[0]['book_name'];     
+            $delete = "You deleted $bookName!";
             $response = ['delete'=>$delete, 'html'=>$personalHtml];
         } else {
             $personalBooks = $this->bookM->getPersonalBook($ownerId);

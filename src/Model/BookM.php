@@ -43,10 +43,29 @@ class BookM
      * 
      * @return array list of book.
      */
-    public function getAllBooks(): array
+    public function getAllBooks(int $start, int $perPage): array
     {
-        $sql = "SELECT * FROM `books`";
+        $status='active';
+        $sql = "SELECT * FROM `books` WHERE status = ? LIMIT ?,?";
         $stmt = $this->_conn->prepare($sql);
+        $stmt->bind_param("sii", $status, $start, $perPage);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        if ($res->num_rows === 0) {
+            exit('No book present');
+        }
+        $arr =$res->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return $arr;
+    }
+
+    public function getRecentBook()
+    {
+        $start = 5;
+        $step = 5;
+        $sql = "SELECT * FROM `books` WHERE upload_date<= SYSDATE() ORDER BY upload_date DESC LIMIT ?";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bind_param("i", $start);
         $stmt->execute();
         $res = $stmt->get_result();
         if ($res->num_rows === 0) {
@@ -245,7 +264,22 @@ class BookM
         } else {
             $res = false;
         }
+        $stmt->close();
         return $res;
     }
+    public function getNumOfBooks()
+    {
+        $status = 'active';
+        $sql = "SELECT * FROM `books` WHERE status = ?";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bind_param("s", $status);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        if ($res->num_rows === 0) {
+            exit('No books');
+        }
+        return $res->num_rows;
+    }
+    
 }
 ?>

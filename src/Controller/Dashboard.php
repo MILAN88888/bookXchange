@@ -30,8 +30,6 @@ use Bookxchange\Bookxchange\Model\BookM;
  */
 class Dashboard
 {
-
- 
     private $_twig;
     private $_loader;
     protected $bookM;
@@ -54,10 +52,15 @@ class Dashboard
      * 
      * @return static twig file.
      */
-    public function getDashboard()
+    public function getDashboard(int $start, int $perPage, int $pagi)
     {
-        $books = $this->bookM->getAllBooks();
-        return $this->_twig->render('dashboard.html.twig', ['books'=>$books]);
+        $books = $this->bookM->getAllBooks($start, $perPage);
+        return $this->_twig->render('dashboard.html.twig', ['books'=>$books,'pagi'=>$pagi]);
     }
+    public function getNumOfBooks()
+    {
+        return $this->bookM->getNumOfBooks();
+    }
+    
 }
 ?>

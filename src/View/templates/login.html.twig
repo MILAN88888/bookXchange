@@ -1,14 +1,16 @@
 <div class="login-div" id="login-div">
+    <b>_____Login Form_____</b><br><br>
     <form class="login-form" id="login-form" action="src/View/action.php" method="post">
 
-        <input type="text" name="phone_no" placeholder="Mobile No." required>
-        <input type="password" name="pass" placeholder="Password" required>
+        <input type="text" name="phone_no" placeholder="Mobile No." ><br>
+        <input type="password" name="pass" placeholder="Password" ><br><br>
         <input type="submit" value="login" name="login">
 
     </form>
     <a href="" id="forget-pass">Forget Password</a>
 </div>
 <div id="forget-div" class="forget-div">
+    Forget Form<br>
     <form id="forget-form" action="src/View/action.php" method="post">
         <input type="text" id="forget-mobile-no" name="mobile_no" placeholder="Mobile Number" required>
         <input type="submit" name="forget" value="Reset Password">
@@ -16,3 +18,10 @@
 </div>
 <script src="{{ baseurl }}js/login.js"></script>
 <script src="{{ baseurl }}js/index.js"></script>
+<style>
+    .login-div, .forget-div{
+        margin-left: 35%;
+        margin-top:60px;
+    }
+    
+</style>
