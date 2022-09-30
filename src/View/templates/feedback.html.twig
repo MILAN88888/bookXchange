@@ -1,3 +1,4 @@
+<div class="all-feedback-container">
 <button id="close-feedback">x</button>
 <h4>{{bookfeedback.book_name}}</h4>
 <img src="../Upload/Books/{{ bookfeedback.image }}" width="50px" height="50px" />
@@ -6,6 +7,18 @@
   <b>Upload By</b>:<a href="#" id="ownerdetail"> {{bookfeedback.user_name}}</a><br>
   <b>Rating</b>: {{bookfeedback.rating}}
 </p>
+{% if userId != bookfeedback.owner_id %}
+  {% if reqst == 0 %}
+  <button disabled>Requested</button>
+  {% elseif reqst == 1 %}
+  <button id="returnrequest{{bookfeedback.id}}" onclick="bookreturnrequest('{{ bookfeedback.id }}', '{{ bookfeedback.owner_id }}')">Return</button>
+  {% elseif reqst == 2 %}
+  <button disabled>Return Requested</button>
+  {% else %}
+  <button id="request{{bookfeedback.id}}" onclick="bookrequest('{{ bookfeedback.id }}', '{{ bookfeedback.owner_id }}')">Request</button>
+  {% endif %}
+{% endif %}
+{{reqst.rq_status}}
 <form id="feedback-form">
   <input hidden type="text" value="{{book.id}}" name="book_id">
   <input type="text" id="feedback" name="feedback" placeholder="enter feedback" required>
@@ -38,6 +51,7 @@
     </tr>
   </table>
 </div>
+</div>
 <style>
   #close-feedback {
     float: right;
@@ -55,18 +69,65 @@
     top: 50%;
     transform: translate(-50%, -50%);
     width: auto;
-    height: 150px;
+    height: auto;
     background-color: rgb(80, 224, 36);
     display: none;
     border-radius: 20px;
     padding: 10px;
   }
+  .all-feedback-container
+  {
+    margin-left: 10px;
+  }
 </style>
 <script>
   $(document).find('#close-feedback').click(function () {
     $('#bookfeedback-div').hide(800);
+ 
   });
   $(document).find('#ownerdetail').click(function () {
     $(document).find('#ownerdetail-div').toggle();
   })
+  function bookrequest(bookid, ownerid)
+  {
+    console.log(bookid);
+    console.log(ownerid);
+    $.ajax({
+        url:'action.php?type=bookrequest',
+        type:'post',
+        dataType:'json',
+        data:{'bookid':bookid,'ownerid':ownerid},
+        success:function(res){
+            console.log(res.request);
+            if(res.request == true)
+            {
+             
+                    $(document).find('#request'+bookid).html('Requested');
+                    $(document).find('#request'+bookid).prop('disabled', true);
+            }
+        }
+
+    })
+  }
+  function bookreturnrequest(bookid, ownerid)
+  {
+    console.log(bookid);
+    console.log(ownerid);
+    $.ajax({
+        url:'action.php?type=bookreturnrequest',
+        type:'post',
+        dataType:'json',
+        data:{'bookid':bookid,'ownerid':ownerid},
+        success:function(res){
+            console.log(res.returnrequest);
+            if(res.returnrequest == true)
+            {
+             
+                    $(document).find('#returnrequest'+bookid).html('Return Requested');
+                    $(document).find('#returnrequest'+bookid).prop('disabled', true);
+            }
+        }
+
+    })
+  }
 </script>

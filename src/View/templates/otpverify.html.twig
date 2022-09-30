@@ -31,7 +31,35 @@
 
         </div>
     </nav>
-    <form action="otpverify.php" method="post">
-        <input type="tesxt" name="otp" placeholder="enter 4 digit otp" required>
+    <div class="otp-div">
+        <p><b>____Enter OTP_____</b></p>
+    <form id="otpverify-form" action="otpverify.php" method="post">
+        <input type="tesxt" name="otp" placeholder="enter 4 digit otp"><br>
         <input type="submit" name="otpsubmit" value="submit otp">
     </form>
+</div>
+    <style>
+        .error{
+            color:red;
+        }
+        .otp-div{
+            margin-left: 40%;
+        }
+    </style>
+    <script>
+        $('#otpverify-form').validate({
+            rules:{
+                otp:{
+                    required:true,
+                    minlength:4,
+                    maxlength:4,
+                }
+            }, messages:{
+                otp:{
+                    required:"Enter Otp",
+                    minlength:"Otp must have 4 digit",
+                    maxlength:"Otp must have 4 digit",
+                }
+            }
+        })
+    </script>

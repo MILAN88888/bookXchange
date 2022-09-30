@@ -16,7 +16,7 @@ function myedit(str) {
             $('#book_edition').val(res[0].edition);
             $('#book_des').val(res[0].description);
             $('#book_rating').val(res[0].rating);
-            $('#book' + res[0].id).after($('#editbook-div').detach());
+            // $('#book' + res[0].id).after($('#editbook-div').detach());
             $(document).find('#editbook-div').show();
             $('#editbook-form').submit(function (e) {
                 e.preventDefault();
@@ -43,8 +43,12 @@ function myedit(str) {
                         processData: false,
                         contentType: false,
                         success: function (res) {
+                            $(document).find('#editbook-form')[0].reset();
+                            $(document).find('#editbook-div').hide();
                             $(document).find('#edit-msg').html(res.edit);
                             $(document).find('#personalbook-div').html(res.html);
+                            
+                            
                         }
                     })
                 }

@@ -48,7 +48,7 @@ class Book
     }
     /**
      * Addbook function add the books
-     * 
+     *
      * @return static return twig file.
      */
     public function addBook()
@@ -58,7 +58,7 @@ class Book
 
     /**
      * Function addNewbook adds new book.
-     * 
+     *
      * @param $bookImage   image for book.
      * @param $bookName    name for book.
      * @param $bookGenre   genre for book.
@@ -67,7 +67,7 @@ class Book
      * @param $bookDes     description of book.
      * @param $bookRating  book rating.
      * @param $ownerId     book owner id.
-     * 
+     *
      * @return bool return true or false.
      */
     public function addNewBook(
@@ -79,7 +79,7 @@ class Book
         string $bookDes,
         float $bookRating,
         int $ownerId
-    ):bool {
+    ): bool {
         $bookId = null;
         $addNewBook = $this->bookM->addNewBook(
             $bookId,
@@ -97,25 +97,25 @@ class Book
 
     /**
      * Function getPersonalBook give the personalbooks.
-     * 
+     *
      * @param $id id of owner.
-     * 
-     * @return static 
+     *
+     * @return static
      */
     public function getPersonalBook(int $id)
-    {   
+    {
         $personalBooks = $this->bookM->getPersonalBook($id);
         return $this->_twig->render(
             'personalbook.html.twig',
             ['personalBooks'=>$personalBooks]
-        );     
+        );
     }
 
     /**
      * Function getBookDetails give books detail.
-     * 
+     *
      * @param $id is book id.
-     * 
+     *
      * @return void array in json form.
      */
     public function getBookDetails(int $id)
@@ -126,7 +126,7 @@ class Book
 
     /**
      * Function updateBook update the books.
-     * 
+     *
      * @param $bookId      is id for book.
      * @param $bookImage   image of book.
      * @param $bookName    is name of book.
@@ -136,7 +136,7 @@ class Book
      * @param $bookDes     is description of book.
      * @param $bookRating  is rating of book.
      * @param $ownerId     is owner id.
-     * 
+     *
      * @return void json encodeed array.
      */
     public function updateBook(
@@ -164,18 +164,18 @@ class Book
         if ($addNewBook == true) {
             $personalBooks = $this->bookM->getPersonalBook($ownerId);
             $personalHtml = $this->_twig->render(
-                'personalbook.html.twig', 
+                'personalbook.html.twig',
                 ['personalBooks'=>$personalBooks]
-            );     
+            );
             $edit = "You edited $bookName!";
             $response = ['edit'=>$edit, 'html'=>$personalHtml];
         } else {
             $personalBooks = $this->bookM->getPersonalBook($ownerId);
             $personalHtml = $this->_twig->render(
-                'personalbook.html.twig', 
+                'personalbook.html.twig',
                 ['personalBooks'=>$personalBooks]
             );
-            $edit = "No any change!";     
+            $edit = "No any change!";
             $response = ['edit'=>$edit, 'html'=>$personalHtml];
         }
         echo json_encode($response);
@@ -183,14 +183,14 @@ class Book
 
     /**
      * Function deletePersonalBook delete personal book.
-     * 
+     *
      * @param $bookId  is book id.
      * @param $ownerId is owner id.
-     * 
+     *
      * @return void array in json format.
      */
     public function deletePersonalBook(int $bookId, int $ownerId)
-    {   
+    {
         $bookDetails = $this->bookM->getBookDetails($bookId);
         $deleteBook = $this->bookM->deletePersonalBook($bookId);
         if ($deleteBook === true) {
@@ -199,7 +199,7 @@ class Book
                 'personalbook.html.twig',
                 ['personalBooks'=>$personalBooks]
             );
-            $bookName = $bookDetails[0]['book_name'];     
+            $bookName = $bookDetails[0]['book_name'];
             $delete = "You deleted $bookName!";
             $response = ['delete'=>$delete, 'html'=>$personalHtml];
         } else {
@@ -208,7 +208,7 @@ class Book
                 'personalbook.html.twig',
                 ['personalBooks'=>$personalBooks]
             );
-            $delete = "No Any Delete!";     
+            $delete = "No Any Delete!";
             $response = ['delete'=>$delete, 'html'=>$personalHtml];
         }
         echo json_encode($response);
@@ -216,18 +216,21 @@ class Book
 
     /**
      * Function bookFeedback give feedback for book.
-     * 
+     *
      * @param $bookid is book id.
-     * 
+     * @param $userId is user  id.
+     *
      * @return void array in json format.
      */
-    public function bookFeedback($bookid)
+    public function bookFeedback(int $bookid, int $userId): void
     {
         $feedback = $this->bookM->bookFeedback($bookid);
         $allfeedback = $this->bookM->allBookFeedback($bookid);
+        $requestStatus = $this->bookM->requestStatus($bookid, $userId);
+        $rqst = isset($requestStatus['status']) ? $requestStatus['status'] : -1;
         $bookFeedback = $this->_twig->render(
             'feedback.html.twig',
-            ['bookfeedback'=>$feedback]
+            ['bookfeedback'=>$feedback,'userId'=>$userId,'reqst'=>$rqst]
         );
         $allBookFeedback = $this->_twig->render(
             'feedbacklist.html.twig',
@@ -238,20 +241,25 @@ class Book
     }
     /**
      * Function insertBookFeedback for feedback
-     * 
+     *
      * @param $bookId   is book id.
      * @param $feedback is feedback.
      * @param $userid   is user id.
      * @param $userName is name of user.
-     * 
+     *
      * @return void  array in json format.
      */
-    public function insertBookFeedback(int $bookId, string $feedback,
-        int $userid, string $userName
-    ) {
+    public function insertBookFeedback(
+        int $bookId,
+        string $feedback,
+        int $userid,
+        string $userName
+    ): void {
         $feedback = $this->bookM->insertBookFeedback(
-            $bookId, $feedback,
-            $userid, $userName
+            $bookId,
+            $feedback,
+            $userid,
+            $userName
         );
         if ($feedback == true) {
             $allfeedback = $this->bookM->allBookFeedback($bookId);
@@ -272,5 +280,116 @@ class Book
         }
         echo json_encode($res);
     }
+    /**
+     * Function bookRequest for request book.
+     *
+     * @param $bookId      is book id.
+     * @param $ownerId     is book ownerId.
+     * @param $requesterId is  id  of requester.
+     *
+     * @return void array in json format.
+     */
+    public function bookRequest(int $bookId, int $ownerId, int $requesterId): void
+    {
+        $request = $this->bookM->bookRequest($bookId, $ownerId, $requesterId);
+        $res = ['request'=>$request];
+        echo json_encode($res);
+    }
+
+    /**
+     * Function bookReturnRequest for issued book.
+     *
+     * @param $bookId      is book id.
+     * @param $ownerId     is book ownerId.
+     * @param $requesterId is  id  of requester.
+     *
+     * @return void array in json format.
+     */
+    public function bookReturnRequest(int $bookId, int $ownerId, int $requesterId)
+    {
+        $request = $this->bookM->bookReturnRequest($bookId, $ownerId, $requesterId);
+        $res = ['returnrequest'=>$request];
+        echo json_encode($res);
+    }
+
+    /**
+     * Function getAllSentRequest to get all request book.
+     *
+     * @param $userId is user id.
+     *
+     * @return static twig file sentrequest with all list.
+     */
+    public function getAllSentRequest(int $userId)
+    {
+        $allSentRequest = $this->bookM->getAllSentRequest($userId);
+        return $this->_twig->render(
+            'sentrequest.html.twig',
+            ['allsentrequest'=>$allSentRequest]
+        );
+    }
+
+    /**
+     * Function getAllRecievedRequest to get allreceived request book.
+     *
+     * @param $userId is user id.
+     *
+     * @return static twig file  with all received request list.
+     */
+    public function allReceivedRequest(int $userId)
+    {
+        $allReceivedRequest = $this->bookM->getAllReceivedRequest($userId);
+        return $this->_twig->render(
+            'receivedrequest.html.twig',
+            ['allreceivedrequest'=>$allReceivedRequest]
+        );
+    }
+
+    /**
+     * Function updateRequest update request status.
+     *
+     * @param $requesterId is id of requester.
+     * @param $bookId      is book id.
+     * @param $ownerId     is book owner id.
+     * @param $status      is status of book.
+     * @param $reason      is reason for reject book.
+     *
+     * @return void nothing return.
+     */
+    public function updateRequest(
+        int $requesterId,
+        int $bookId,
+        int $ownerId,
+        int $status,
+        string $reason
+    ): void {
+        $request = $this->bookM->updateRequest(
+            $requesterId,
+            $bookId,
+            $ownerId,
+            $status,
+            $reason
+        );
+        if ($status == 1) {
+            if ($request == true) {
+                $_SESSION['msg'] = 'Request Granted';
+            } else {
+                $_SESSION['msg'] = "Request not Granted";
+            }
+        }
+        if ($status == 4) {
+            if ($request == true) {
+                $_SESSION['msg'] = 'Request is Rejected';
+            } else {
+                $_SESSION['msg'] = "Request isnot Rejected";
+            }
+        }
+        if ($status == 3) {
+            if ($request == true) {
+                $_SESSION['msg'] = 'Return Request Granted';
+            } else {
+                $_SESSION['msg'] = "Return Request not Granted";
+            }
+        }
+        header('location:response.php');
+    }
 }
-?>

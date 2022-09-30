@@ -114,6 +114,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header('location:profile.php');
         }
     }
+    if (isset($_POST['requestgrand'])) {
+        $requesterId = $_POST['requesterid'];
+        $bookId = $_POST['bookid'];
+        $ownerId = $_POST['ownerid'];
+        $status = $_POST['status'];
+        $reason = $_POST['reason'];
+        $book->updateRequest($requesterId, $bookId, $ownerId, $status, $reason);
+    }
+
+    if (isset($_POST['userrating'])) {
+        $requesterId = $_POST['requesterid'];
+        $rating = $_POST['requester_rating'];
+        $bookId = $_POST['bookid'];
+        $ownerId = $_POST['ownerid'];
+        $status = $_POST['status'];
+        $reason = $_POST['reason'];
+        $user->userRating($rating, $requesterId);
+        $book->updateRequest($requesterId, $bookId, $ownerId, $status, $reason);
+    }
 }
 if (isset($_GET['type']) && $_GET['type'] == 'bookedit') {
     $bookId =  $_POST['id'];
@@ -158,7 +177,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'bookdelete') {
 }
 if (isset($_GET['type']) && $_GET['type'] == 'bookfeedback') {
     $bookId = $_POST['book_id'];
-    $book->bookFeedback($bookId);
+    $book->bookFeedback($bookId, $_SESSION['user_id']);
 }
 if (isset($_GET['type']) && $_GET['type'] == 'insertfeedback') {
     $bookId = $_POST['bookid'];
@@ -166,4 +185,16 @@ if (isset($_GET['type']) && $_GET['type'] == 'insertfeedback') {
     $userid = $_SESSION['user_id'];
     $userName = $_SESSION['user_name'];
     $book->insertBookFeedback($bookId, $feedback, $userid, $userName);
+}
+if (isset($_GET['type']) && $_GET['type'] == 'bookrequest') {
+    $bookId = $_POST['bookid'];
+    $ownerId = $_POST['ownerid'];
+    $requesterId = $_SESSION['user_id'];
+    $book->bookRequest($bookId, $ownerId, $requesterId);
+}
+if (isset($_GET['type']) && $_GET['type'] == 'bookreturnrequest') {
+    $bookId = $_POST['bookid'];
+    $ownerId = $_POST['ownerid'];
+    $requesterId = $_SESSION['user_id'];
+    $book->bookReturnRequest($bookId, $ownerId, $requesterId);
 }

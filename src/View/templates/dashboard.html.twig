@@ -3,11 +3,23 @@
 
 <div id="books-div" style="display: inline-block">
   <div class="row d-flex  mx-1" style="cursor:pointer;" onclick="bookdetails('{{ book.id }}')">
-    <div class="card" style="width: 12rem; height:18rem">
+    <div class="card" style="width: 13rem; height:18rem">
       <img src="../Upload/Books/{{ book.image }}" width="100px" height="100px" class="card-img-top" alt="...">
       <div class="card-body">
         <p class="card-title">{{ book.book_name }}</p>
-        <p class="card-text">Author : {{ book.author}} <br>Edition : {{ book.edition }}<br> Status : {{ book.status }}
+        <p class="card-text">Author : {{ book.author}} <br>Edition : {{ book.edition }}<br> Status : {% if book.rstatus is not null and book.rstatus == 0 %}
+          Pending
+          {% elseif book.rstatus == 1 %}
+          Issued
+          {% elseif book.rstatus == 2 %}
+          Returning
+          {% elseif book.rstatus == 3 %}
+          Returned
+          {% elseif book.rstatus == 4 %}
+          Rejected
+          {% else %}
+          Not issued
+          {% endif %}
           <br> Rating : {{ book.rating }}
         </p>
       </div>
@@ -40,7 +52,10 @@
     display: none;
   }
   .allbook-div {
-    text-align: center;
+    margin-left: 9%;
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
     margin-top:50px;
   }
   .pagi-div {

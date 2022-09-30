@@ -2,8 +2,8 @@
 
 <div id="personalbook-div">
     {% for book in personalBooks %}
-    <div style="display: inline-block">
-        <div class="row d-flex  mx-1">
+
+        <div class="mx-1">
             <div id="book{{book.id}}" class="card" style="width: 15rem;">
                 <img src="../Upload/Books/{{ book.image }}" width="100px" height="100px" class="card-img-top" alt="...">
                 <div class="card-body">
@@ -15,16 +15,16 @@
                 </div>
             </div>
         </div>
-    </div>
+  
     {% endfor %}
 
 </div>
-
 <div id="editbook-div">
-    <b><p>___Edit Form___</p></b>
+    
     <button id="edit-close">x</button>
+    <b><p>________Edit Book Form______</p></b>
     <form action="" id="editbook-form" method="post" enctype="multipart/form-data" autocomplete="off">
-        <img width="150px" height="50px" id="edit-img" />
+        <img width="200px" height="100px" id="edit-img" /><br><br>
         <input hidden type="text" id="book_id" name="book_id" placeholder="Book id">
         <input hidden type="text" id="old_image" name="old_image">
         <input type="file" id="book_image" name="book_image">
@@ -33,22 +33,30 @@
         <input type="text" id="book_genre" name="book_genre" placeholder="Book Genre">
         <input type="text" id="book_author" name="book_author" placeholder="Book Author">
         <input type="text" id="book_edition" name="book_edition" placeholder="Book Edition">
-        <input type="text" id="book_des" name="book_des" placeholder="Book Description">
+        <input type="text" id="book_des" name="book_des" placeholder="Book Description"><br>
         <select>
-            <option>Not-issued</option>
-        </select>
+            <option>Not-issued</option><br>
+        </select><br>
         <input type="number" id="book_rating" min="1" max="5" step="0.5" name="book_rating" placeholder="Rating 1 to 5"
             required>
             <br>
-        <input type="submit" name="editbook" value="edit book">
+            <br>
+        <input type="submit" name="editbook" value="submit">
     </form>
 
 </div>
 <style>
     #editbook-div {
-        width: 200px;
+        display: none;
+        width: 350px;
+        height: 450px;
         background-color: aquamarine;
-        padding-left: 15px;
+        padding-left: 75px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        
     }
 
     #editbook-div {
@@ -62,6 +70,12 @@
     .error {
         color: red;
     }
+    #personalbook-div
+    {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
    
    
 </style>
@@ -72,6 +86,7 @@
 <script>
     $(document).find('#edit-close').click(function () {
         $(document).find('#editbook-div').hide();
+        $(document).find('#editbook-form')[0].reset();
     })
 
 </script>

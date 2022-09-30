@@ -224,12 +224,12 @@ class UserM
     /**
      * Function updateProfile
      *
-     * @param $newUserImage
-     * @param $newUserName name of user
-     * @param $newUserNumber number of user.
+     * @param $newUserImage   user image
+     * @param $newUserName    name of user
+     * @param $newUserNumber  number of user.
      * @param $newUserAddress address of user.
-     * @param $newUserEmail email of user.
-     * @param $userId is id of user.
+     * @param $newUserEmail   email of user.
+     * @param $userId         is id of user.
      *
      * @return bool true or false.
      */
@@ -240,9 +240,10 @@ class UserM
         string $newUserAddress,
         string $newUserEmail,
         int $userId
-    )
-    {
-        $sql = "UPDATE `register` SET image=?, user_name=?, mobile_no=?, address=?,email=? WHERE id=?";
+    ) {
+        $sql = "UPDATE `register` SET image=?, user_name=?, mobile_no=?, 
+        address=?,email=? 
+        WHERE id=?";
         $stmt = $this->_conn->prepare($sql);
         $stmt->bind_param(
             "sssssi",
@@ -261,5 +262,21 @@ class UserM
         }
         $stmt->close();
         return $res;
+    }
+
+    /**
+     * Function userRating
+     * 
+     * @param $rating      rating of user.
+     * @param $requesterId user id.
+     * 
+     * @return void nothing.
+     */
+    public function userRating($rating, $requesterId):void
+    {
+        $sql = "UPDATE `register` SET rating = ? WHERE id = ?";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bind_param("di", $rating, $requesterId);
+        $stmt->execute();
     }
 }

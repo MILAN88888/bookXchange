@@ -1,0 +1,146 @@
+<div class="recieved-request-div">
+    {% for receivedrequest in allreceivedrequest %}
+    <div class="sent-request-item">
+        {% if receivedrequest.status == 0 %}
+        <p>{{receivedrequest.requester_name}} requested you {{receivedrequest.book_name}} </p>
+        <form id="grand-form" action="action.php" method="post" onsubmit="return confirm('Do you really want to comfirm request?');">
+            <input type="text" value="1" name="status" hidden>
+            <input type="text" value="{{receivedrequest.requester_id}}" name="requesterid" hidden>
+            <input type="text" value="{{receivedrequest.book_id}}" name="bookid" hidden>
+            <input type="text" value="{{receivedrequest.owner_id}}" name="ownerid" hidden>
+            <input type="text" name="reason" value="" hidden>
+            <button type="submit" name="requestgrand">Grant</button>
+        </form>
+        <button id="requestreject">Reject</button>
+        <div id="request-reject-div">
+            <button id="request-closer">x</button>
+            <p><b>____Reason____</b></p>
+            <form id="reject-form" action="action.php" method="post">
+                <input type="text" value="4" name="status" hidden>
+
+                <input type="text" value="{{receivedrequest.requester_id}}" name="requesterid" hidden>
+                <input type="text" value="{{receivedrequest.book_id}}" name="bookid" hidden>
+                <input type="text" value="{{receivedrequest.owner_id}}" name="ownerid" hidden>
+                <input type="text" name="reason" placeholder="Enter reason for rejection">
+                <br>
+                <br>
+                <button type="submit" name="requestgrand">submit</button>
+            </form>
+        </div>
+
+        {% elseif receivedrequest.status == 1 %}
+        <p>You Granted Requst to {{receivedrequest.requester_name}} for {{ receivedrequest.book_name }}</p>
+        {% elseif receivedrequest.status == 2 %}
+        <p> {{ receivedrequest.requester_name }} requested you to return {{receivedrequest.book_name}}</p>
+        <button id="returngrand" onclick="return confirm('Do you really want to confirm return request?');">grant</button>
+        <div id="return-grand-div">
+            <button id="grand-closer">x</button>
+            <p><b>___ User Rating__</b></p>
+            <form id="returngrand-form" action="action.php" method="post">
+                <input type="text" value="3" name="status" hidden>
+                <input type="text" value="{{receivedrequest.requester_id}}" name="requesterid" hidden>
+                <input type="text" value="{{receivedrequest.book_id}}" name="bookid" hidden>
+                <input type="text" value="{{receivedrequest.owner_id}}" name="ownerid" hidden>
+                <input type="text" name="reason" value="" hidden>
+                <input type="number" min="1" max="5" step="0.5" name="requester_rating"
+                    placeholder="Rating for requester 1 to 5">
+                    <br>
+                    <br>
+                <input type="submit" value="submit" name="userrating">
+            </form>
+        </div>
+        {% elseif receivedrequest.status == 3 %}
+        <p>You Granted Return Request to {{ receivedrequest.requester_name }} for {{receivedrequest.book_name}}</p>
+        {% elseif receivedrequest.status == 4 %}
+        <P>You cancelled the request by :{{receivedrequest.requester_name}}</P>
+        <p>request cancelled</p>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    .recieved-request-div {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .sent-request-item {
+        border: 1px solid rgb(19, 5, 143);
+        border-radius: 50px;
+        width: 80%;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    #request-reject-div,
+    #return-grand-div {
+        display: none;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background-color: aquamarine;
+        border: 1px solid black;
+        border-radius: 20px;
+        padding-top: 20px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    #request-closer,
+    #grand-closer {
+        float: right;
+        background-color: red;
+    }
+
+    .error {
+        color: red;
+    }
+</style>
+<script>
+    $('#requestreject').click(function () {
+        $(document).find('#request-reject-div').show();
+    })
+    $('#request-closer').click(function () {
+        $(document).find('#request-reject-div').hide()
+        $(document).find('#reject-form')[0].reset();
+
+    })
+    $('#returngrand').click(function () {
+        $(document).find('#return-grand-div').show();
+    })
+    $('#grand-closer').click(function () {
+        $(document).find('#return-grand-div').hide()
+        $(document).find('#returngrand-form')[0].reset();
+
+    })
+    $('#returngrand-form').validate({
+        rules: {
+            requester_rating: {
+                required: true,
+                number: true,
+            }
+        }, messages: {
+            requester_rating: {
+                required: "Enter Rating",
+                number: "Number Format",
+            }
+        }
+    })
+    $('#reject-form').validate({
+        rules: {
+            reason: {
+                required: true,
+                minlength: 5,
+            }
+        }, messages: {
+            reason: {
+                required: "Enter Reason",
+                minlength: "atleast 5 characters",
+            }
+        }
+    })
+
+</script>

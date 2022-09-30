@@ -33,7 +33,8 @@ class User
     private $_twig;
     private $_loader;
     protected $userM;
-
+    protected $arrRating =[];
+    protected $userRating=[];
     /**
      * Constructor for User.
      * 
@@ -268,5 +269,26 @@ class User
             $userId
         );
         return $updateProfile;
+    }
+
+    /**
+     * Function userRating user rating
+     * 
+     * @param $rating      is rating of user.
+     * @param $requesterId is userid.
+     * 
+     * @return void return nothing.
+     */
+    public function userRating(float $rating, int $requesterId):void
+    {   
+    //     foreach($this->arrRating as $key) 
+    //     {
+    //     if ($this->arrRating[$requesterId] == $key )
+    //     array_push($key, $rating);
+    // }
+    //     $this->arrRating = array_filter($this->arrRating);
+    //     $averageRating = array_sum($this->arrRating)/count($this->arrRating);
+    //     $finalRating = round($averageRating,1);
+        $this->userM->userRating($rating, $requesterId);
     }
 }

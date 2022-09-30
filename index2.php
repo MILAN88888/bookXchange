@@ -25,10 +25,10 @@ session_start();
 //     header('location:src/View/dashboard.php');
 // } else {
     echo $home->getHome2();
-    if (isset($_SESSION['fail'])
-        && $_SESSION['fail'] != ''
-    ) {
-        echo '<div 
+if (isset($_SESSION['fail'])
+    && $_SESSION['fail'] != ''
+) {
+    echo '<div 
         class="alert alert-danger alert-dismissible fade show" role="alert">
         '.$_SESSION['fail'].'
            <button 
@@ -36,10 +36,10 @@ session_start();
              <span aria-hidden="true">&times;</span>
            </button>
          </div>';
-        unset($_SESSION['fail']);
-    }
-    if (isset($_SESSION['msg'])) {
-        echo '<div class="alert alert-danger
+    unset($_SESSION['fail']);
+}
+if (isset($_SESSION['msg'])) {
+    echo '<div class="alert alert-danger
          alert-dismissible fade show" role="alert">
         '.$_SESSION['msg'].'
            <button type="button" class="close" data-dismiss="alert"
@@ -47,7 +47,7 @@ session_start();
              <span aria-hidden="true">&times;</span>
            </button>
          </div>';
-        unset($_SESSION['msg']);
-    }
+    unset($_SESSION['msg']);
+}
 // }
 ?>

@@ -36,7 +36,7 @@ class Dashboard
 
     /**
      * Construtor for dashboard class.
-     * 
+     *
      * @param $baseurl is baseurl.
      */
     public function __construct($baseurl)
@@ -49,18 +49,29 @@ class Dashboard
 
     /**
      * Function getDashboard give the dashboard.
-     * 
+     *
+     * @param $start   start pagination
+     * @param $perPage number of record per page.
+     * @param $pagi    number of pagination.
+     * @param $userId user id.
+     *
      * @return static twig file.
      */
-    public function getDashboard(int $start, int $perPage, int $pagi)
+    public function getDashboard(int $start, int $perPage, int $pagi, $userId)
     {
-        $books = $this->bookM->getAllBooks($start, $perPage);
-        return $this->_twig->render('dashboard.html.twig', ['books'=>$books,'pagi'=>$pagi]);
+        $books = $this->bookM->getAllBooks($start, $perPage, $userId);
+        return $this->_twig->render(
+            'dashboard.html.twig',
+            ['books'=>$books,'pagi'=>$pagi]
+        );
     }
-    public function getNumOfBooks()
+    /**
+     * Function getNumOfBooks is number of books.
+     *
+     * @return int number of books.
+     */
+    public function getNumOfBooks(): int
     {
         return $this->bookM->getNumOfBooks();
     }
-    
 }
-?>

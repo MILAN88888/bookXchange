@@ -1,0 +1,33 @@
+<div class="sent-request-div">
+    {% for sentrequest in allsentrequest %}
+    <div class="sent-request-item">
+        {% if sentrequest.status == 0 %}
+        <p>You requested {{ sentrequest.book_name }} sent to {{sentrequest.owner_name}}</p>
+        {% elseif sentrequest.status == 1 %}
+        <p>{{ sentrequest.owner_name }} issued {{sentrequest.book_name}} to you</p>
+        {% elseif sentrequest.status == 2 %}
+        <p>You requested return {{sentrequest.book_name}} to {{ sentrequest.owner_name }}</p>
+        {% elseif sentrequest.status == 3 %}
+        <p>{{ sentrequest.owner_name }} granted return of {{sentrequest.book_name}}</p>
+        {% elseif sentrequest.status == 4 %}
+        <P>Reason: {{sentrequest.reason}}</P>
+        <p>request cancelled</p>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+<style>
+    .sent-request-div {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .sent-request-item {
+        border: 1px solid rgb(19, 5, 143);
+        border-radius: 50px;
+        width: 80%;
+        text-align: center;
+        margin-top: 10px;
+    }
+</style>

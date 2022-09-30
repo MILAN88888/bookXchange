@@ -12,15 +12,14 @@
  */
 require '../Include/common.php';
     $perPage = 6;
-	$start = 0;
-	if (isset($_GET['start']))
-	{
-		$start = $_GET['start'];
-		$currentPage = $start;
-		$start--;
-		$start = $start * $perPage;
-	}
+    $start = 0;
+if (isset($_GET['start'])) {
+    $start = $_GET['start'];
+    $currentPage = $start;
+    $start--;
+    $start = $start * $perPage;
+}
     $record = $dashboard->getNumOfBooks();
-	$pagi = ceil($record/$perPage);
-    echo $dashboard->getDashboard($start, $perPage, $pagi);
+    $pagi = ceil($record/$perPage);
+    echo $dashboard->getDashboard($start, $perPage, $pagi, $_SESSION['user_id']);
 ?>
