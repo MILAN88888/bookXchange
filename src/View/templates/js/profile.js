@@ -49,7 +49,7 @@ $('#profile-form').validate({
         },
         user_address:{
             required:true,
-            minlength:10,
+            minlength:5,
         },
         user_email:{
             required:true,

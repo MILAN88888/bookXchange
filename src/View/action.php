@@ -133,6 +133,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user->userRating($rating, $requesterId);
         $book->updateRequest($requesterId, $bookId, $ownerId, $status, $reason);
     }
+
+    if (isset($_POST['reset_new_password'])) {
+        $userId = $_SESSION['user_id'];
+        $oldPass = $_POST['old_user_password'];
+        $newPass = $_POST['new_user_password'];
+        $user->resetNewPassword($userId, $oldPass, $newPass);
+    }
 }
 if (isset($_GET['type']) && $_GET['type'] == 'bookedit') {
     $bookId =  $_POST['id'];
@@ -197,4 +204,9 @@ if (isset($_GET['type']) && $_GET['type'] == 'bookreturnrequest') {
     $ownerId = $_POST['ownerid'];
     $requesterId = $_SESSION['user_id'];
     $book->bookReturnRequest($bookId, $ownerId, $requesterId);
+}
+
+if (isset($_GET['type']) && $_GET['type'] == 'search') {
+    $bookData = $_POST['bookdata'];
+    $book->bookSearch($bookData);
 }

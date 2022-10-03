@@ -25,4 +25,36 @@ function bookdetails(str) {
             });
         }
     });
+    
 }
+$(document).ready(function () {
+    $('#book-search').keyup(function () { 
+        var bookdata = $(this).val();
+       
+        if(bookdata != '') 
+        {
+            $("#search-data-div").css("display","flex");
+            $('#search-data-div').show();
+            $(document).find('.allbook-div').hide();
+            $(document).find('.pagi-div').hide(); 
+              
+            $.ajax({
+                url:'action.php?type=search',
+                type:'post',
+                data:{ 'bookdata': bookdata },
+                success:function(data)
+                { 
+                    $('#search-data-div').html(data);
+                    
+                }
+            });
+        } else {
+            $("#search-data-div").css("display","none");
+            $('#search-data-div').hide();
+            $('.allbook-div').show();
+            $('.pagi-div').show();
+               
+        }
+        
+    });
+});

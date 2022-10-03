@@ -5,7 +5,7 @@
 <p><b>Book Name</b> : {{bookfeedback.book_name}}<br>
   <b>Description</b>: {{bookfeedback.description}}<br>
   <b>Upload By</b>:<a href="#" id="ownerdetail"> {{bookfeedback.user_name}}</a><br>
-  <b>Rating</b>: {{bookfeedback.rating}}
+  <b>User Rating</b>: {{bookfeedback.rating}}
 </p>
 {% if userId != bookfeedback.owner_id %}
   {% if reqst == 0 %}

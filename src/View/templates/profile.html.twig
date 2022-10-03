@@ -11,6 +11,18 @@
         <input class="profile" type="text" id="user_email" value="{{user.email}}" name="user_email" /><br>
         <input class="profile" type="submit" id="update_user" name="updateprofile" value="save"/>
         </form>
+        <a style="cursor:pointer;text-decoration:underline;color:blue" id="reset-pass-btn">Reset password</a>
+</div>
+<div id="reset-password-div">
+    <p><b>______Reset Password______</b></p>
+    <form id="reset-password-form" action="action.php" method="post" autocomplete="off">
+        <input type="password" name="old_user_password" placeholder="Enter Old Password" autocomplete="off">
+        <input type="password" name="new_user_password" placeholder="Enter New Password">
+        <br>
+        <br>
+        <input type="submit" name="reset_new_password" value="submit">
+    </form>
+  
 </div>
 <style>
     .profile{
@@ -25,10 +37,47 @@
     #profile-div{
         justify-items: center;
         position: relative;
-        left:30%;
+        left:40%;
     }
     .error{
         color:red;
     }
+    #reset-password-div {
+        display: none;
+        width: 400px;
+        border: 1px solid green;
+        border-radius: 50px;
+        margin-left: 40%;
+        text-align: center;
+        padding: 50px;
+        margin-top: 100px;
+    }
 </style>
 <script src="{{ baseurl }}js/profile.js"></script>
+<script>
+    $('#reset-pass-btn').click(function(){
+        $('#reset-password-div').show();
+        $('#profile-div').hide();
+    })
+    $('#reset-password-form').validate({
+        rules:{
+            old_user_password:{
+                required:true,
+                minlength:5,
+            },
+            new_user_password:{
+                required:true,
+                minlength:5,
+            }
+        },messages:{
+            old_user_password:{
+                required:"Enter old password",
+                minlength:"At least 5 character",
+            },
+            new_user_password:{
+                required:"Enter new passowrd",
+                minlength:"At least 5 character",
+            }
+        }
+    })
+</script>

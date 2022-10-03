@@ -526,4 +526,28 @@ class BookM
         $stmt->close();
         return $res;
     }
+
+     /**
+     * Function bookSeach
+     * 
+     * @param $bookData is book data to search
+     * 
+     * @return mixed is array of matched records
+     */
+    public function bookSearch(string $bookData):mixed
+    {
+        $bookData = "%".$bookData."%";
+        $sql = "SELECT * FROM `books` WHERE book_name LIKE ? OR author LIKE ?";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bind_param("ss", $bookData, $bookData);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        if ($res->num_rows === 0) {
+            exit('No Record Found');
+        }
+        $arr =$res->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return $arr;
+    }
+   
 }

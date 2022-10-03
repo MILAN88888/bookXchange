@@ -11,7 +11,7 @@
  * @link     http://pear.php.net/package/PackageName
  */
 require '../Include/common.php';
-    $perPage = 6;
+    $perPage = 5;
     $start = 0;
 if (isset($_GET['start'])) {
     $start = $_GET['start'];

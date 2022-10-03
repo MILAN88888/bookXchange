@@ -291,4 +291,31 @@ class User
     //     $finalRating = round($averageRating,1);
         $this->userM->userRating($rating, $requesterId);
     }
+
+     /**
+     * Function resetNewPassword
+     * 
+     * @param $userId is user id.
+     * @param $oldPass is old password.
+     * @param $newPass is new password.
+     * 
+     * @return 
+     */
+    public function resetNewPassword(int $userId, string $oldPass, string $newPass)
+    {
+        $getOldPass = $this->userM->getOldPass($userId);
+        $oldPassVerify = password_verify($oldPass, $getOldPass['password']);
+        if ($oldPassVerify === true) {
+            $hashPass = password_hash($newPass, PASSWORD_BCRYPT);
+            $updatePass = $this->userM->updateNewPass($userId, $hashPass);
+            if ($updatePass === true) {
+                $_SESSION['msg'] = "Password Updated";
+            } else {
+                $_SESSION['msg'] = "Password not Updated";
+            }
+        } else {
+            $_SESSION['msg'] = "Old password is not correct";
+        }
+        header('location:profile.php');
+    }
 }

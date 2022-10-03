@@ -279,4 +279,45 @@ class UserM
         $stmt->bind_param("di", $rating, $requesterId);
         $stmt->execute();
     }
+
+    /**
+     * Function getOldPass
+     * 
+     * @param $userId is user id
+     * 
+     * @return mixed returning old pass.
+     */
+    public function getOldPass(int $userId):mixed
+    {
+        $sql = "SELECT `password` FROM `register` WHERE id = ?";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $arr = $res->fetch_assoc();
+        return $arr;
+    }
+
+    /**
+     * Function updateNewPass
+     * 
+     * @param $userId is user id.
+     * @param $hashPass is hass password.
+     * 
+     * @return bool trur or false.
+     */
+    public function updateNewPass(int $userId, string $hashPass) {
+        $sql = "UPDATE `register` SET `password` = ? WHERE id = ?";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bind_param("si", $hashPass, $userId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        if ($stmt->affected_rows === 0) {
+            $res = false;
+        } else {
+            $res = true;
+        }
+        $stmt->close();
+        return $res;
+    }
 }

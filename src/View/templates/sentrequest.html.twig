@@ -2,7 +2,7 @@
     {% for sentrequest in allsentrequest %}
     <div class="sent-request-item">
         {% if sentrequest.status == 0 %}
-        <p>You requested {{ sentrequest.book_name }} sent to {{sentrequest.owner_name}}</p>
+        <p>You requested {{ sentrequest.book_name }} to {{sentrequest.owner_name}}</p>
         {% elseif sentrequest.status == 1 %}
         <p>{{ sentrequest.owner_name }} issued {{sentrequest.book_name}} to you</p>
         {% elseif sentrequest.status == 2 %}

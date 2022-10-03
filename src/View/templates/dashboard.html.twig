@@ -1,39 +1,45 @@
+<div id="book-search-div">
+  <input id="book-search" type="text" placeholder="search book">
+</div>
+<div id="search-data-div">
+</div>
 <div class="allbook-div">
-{% for book in books %}
-
-<div id="books-div" style="display: inline-block">
-  <div class="row d-flex  mx-1" style="cursor:pointer;" onclick="bookdetails('{{ book.id }}')">
-    <div class="card" style="width: 13rem; height:18rem">
-      <img src="../Upload/Books/{{ book.image }}" width="100px" height="100px" class="card-img-top" alt="...">
-      <div class="card-body">
-        <p class="card-title">{{ book.book_name }}</p>
-        <p class="card-text">Author : {{ book.author}} <br>Edition : {{ book.edition }}<br> Status : {% if book.rstatus is not null and book.rstatus == 0 %}
-          Pending
-          {% elseif book.rstatus == 1 %}
-          Issued
-          {% elseif book.rstatus == 2 %}
-          Returning
-          {% elseif book.rstatus == 3 %}
-          Returned
-          {% elseif book.rstatus == 4 %}
-          Rejected
-          {% else %}
-          Not issued
-          {% endif %}
-          <br> Rating : {{ book.rating }}
-        </p>
+  {% for book in books %}
+  <div id="books-div" style="display: inline-block">
+    <div class="row d-flex  mx-1" style="cursor:pointer;" onclick="bookdetails('{{ book.id }}')">
+      <div class="card" style="width: 13rem; height:18rem">
+        <img src="../Upload/Books/{{ book.image }}" width="100px" height="100px" class="card-img-top" alt="...">
+        <div class="card-body">
+          <p class="card-title">{{ book.book_name }}</p>
+          <p class="card-text">Author : {{ book.author}} <br>Edition : {{ book.edition }}<br> Status : {% if
+            book.rstatus is not null and book.rstatus == 0 %}
+            Pending
+            {% elseif book.rstatus == 1 %}
+            Issued
+            {% elseif book.rstatus == 2 %}
+            Returning
+            {% elseif book.rstatus == 3 %}
+            Returned
+            {% elseif book.rstatus == 4 %}
+            Rejected
+            {% else %}
+            Not issued
+            {% endif %}
+            <br> Rating : {{ book.rating }}
+          </p>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-{% endfor %}
+  {% endfor %}
 </div>
 <div class="pagi-div">
-{% for i in range(1,pagi) %}
-  <a  href="?start={{i}}" class="btn pagi">{{i}}</a>
-{% endfor %}
+  {% for i in range(1,pagi) %}
+  <a href="?start={{i}}" class="btn pagi">{{i}}</a>
+  {% endfor %}
 </div>
+
 <div id="bookfeedback-div">
 
 </div>
@@ -42,35 +48,54 @@
 <style>
   #bookfeedback-div {
     position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     border-radius: 5px;
     background-color: #63f9f6;
     width: 40%;
     height: 400px;
     display: none;
   }
+
   .allbook-div {
     margin-left: 9%;
     display: flex;
     flex-direction: row;
     justify-items: center;
-    margin-top:50px;
+    margin-top: 80px;
   }
+
   .pagi-div {
 
     text-align: center;
     margin-top: 50px;
   }
+
   .pagi {
-    border:1px solid blue;
+    border: 1px solid blue;
     border-radius: 20px;
     width: 50px;
   }
+
   .active-pagi {
-    background:red;
+    background: red;
+  }
+
+  #book-search-div input {
+    float: right;
+    width: 200px;
+    border-radius: 20px;
+    margin-top: 20px;
+    margin-right: 100px;
+    border: 1px solid blue;
+  }
+
+  #search-data-div {
+    display: none;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 80px;
   }
 </style>
-
-

@@ -11,7 +11,7 @@
             <input type="text" name="reason" value="" hidden>
             <button type="submit" name="requestgrand">Grant</button>
         </form>
-        <button id="requestreject">Reject</button>
+        <button onclick="reject()">Reject</button>
         <div id="request-reject-div">
             <button id="request-closer">x</button>
             <p><b>____Reason____</b></p>
@@ -32,7 +32,7 @@
         <p>You Granted Requst to {{receivedrequest.requester_name}} for {{ receivedrequest.book_name }}</p>
         {% elseif receivedrequest.status == 2 %}
         <p> {{ receivedrequest.requester_name }} requested you to return {{receivedrequest.book_name}}</p>
-        <button id="returngrand" onclick="return confirm('Do you really want to confirm return request?');">grant</button>
+        <button onclick="grant()">grant</button>
         <div id="return-grand-div">
             <button id="grand-closer">x</button>
             <p><b>___ User Rating__</b></p>
@@ -100,17 +100,24 @@
     }
 </style>
 <script>
-    $('#requestreject').click(function () {
+    function reject()
+    {
         $(document).find('#request-reject-div').show();
-    })
+    }
     $('#request-closer').click(function () {
         $(document).find('#request-reject-div').hide()
         $(document).find('#reject-form')[0].reset();
 
     })
-    $('#returngrand').click(function () {
-        $(document).find('#return-grand-div').show();
-    })
+    function grant()
+    {
+        var a = confirm('Do you really want to confirm return request?');
+        if (a==true) {
+            $(document).find('#return-grand-div').show();
+        } else{
+        e.preventDefault();
+        }
+    }
     $('#grand-closer').click(function () {
         $(document).find('#return-grand-div').hide()
         $(document).find('#returngrand-form')[0].reset();

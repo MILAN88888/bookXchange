@@ -392,4 +392,20 @@ class Book
         }
         header('location:response.php');
     }
+    /**
+     * Function bookSeach
+     * 
+     * @param $bookData is book data to search
+     * 
+     * @return void is array of matched records
+     */
+    public function bookSearch(string $bookData):void
+    {
+        $bookSearch = $this->bookM->bookSearch($bookData);
+        $bookSearchhtml = $this->_twig->render('searchbookdata.html.twig', ['books'=>$bookSearch]);
+        // $res = ['bookhtml'=>$bookSearchhtml];
+        // echo json_encode($res);
+        echo $bookSearchhtml;
+    }
+   
 }
