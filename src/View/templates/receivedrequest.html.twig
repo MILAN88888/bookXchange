@@ -3,7 +3,8 @@
     <div class="sent-request-item">
         {% if receivedrequest.status == 0 %}
         <p>{{receivedrequest.requester_name}} requested you {{receivedrequest.book_name}} </p>
-        <form id="grand-form" action="action.php" method="post" onsubmit="return confirm('Do you really want to comfirm request?');">
+        <form id="grand-form" action="action.php" method="post"
+            onsubmit="return confirm('Do you really want to comfirm request?');">
             <input type="text" value="1" name="status" hidden>
             <input type="text" value="{{receivedrequest.requester_id}}" name="requesterid" hidden>
             <input type="text" value="{{receivedrequest.book_id}}" name="bookid" hidden>
@@ -42,10 +43,14 @@
                 <input type="text" value="{{receivedrequest.book_id}}" name="bookid" hidden>
                 <input type="text" value="{{receivedrequest.owner_id}}" name="ownerid" hidden>
                 <input type="text" name="reason" value="" hidden>
-                <input type="number" min="1" max="5" step="0.5" name="requester_rating"
-                    placeholder="Rating for requester 1 to 5">
-                    <br>
-                    <br>
+                {# <input type="number" min="1" max="5" step="0.5" name="requester_rating"
+                    placeholder="Rating for requester 1 to 5"> #}
+                <select name="requester_rating">
+                    <option>-1</option>
+                    <option>3</option>
+                </select>
+                <br>
+                <br>
                 <input type="submit" value="submit" name="userrating">
             </form>
         </div>
@@ -100,8 +105,7 @@
     }
 </style>
 <script>
-    function reject()
-    {
+    function reject() {
         $(document).find('#request-reject-div').show();
     }
     $('#request-closer').click(function () {
@@ -109,13 +113,12 @@
         $(document).find('#reject-form')[0].reset();
 
     })
-    function grant()
-    {
+    function grant() {
         var a = confirm('Do you really want to confirm return request?');
-        if (a==true) {
+        if (a == true) {
             $(document).find('#return-grand-div').show();
-        } else{
-        e.preventDefault();
+        } else {
+            e.preventDefault();
         }
     }
     $('#grand-closer').click(function () {
@@ -132,7 +135,7 @@
         }, messages: {
             requester_rating: {
                 required: "Enter Rating",
-                number: "Number Format",
+                number: "must be in Number Format",
             }
         }
     })

@@ -104,11 +104,12 @@
                 {% if i <= sval %} <i class="mdi mdi-star mr-2"></i>
                   {% endif %}
 
-                  {% if ( i - sval ) == 0.5 %}
-
+                  {% set dif = i - sval %}
+                  
+                  {% if (dif >= 0.1) and (dif <= 0.5) %}
                   <i class="mdi mdi-star-half mr-2"></i>
 
-                  {% set sval = sval  + 0.5 %}
+                  {% set sval = sval + dif  %}
                
                   {% endif %}
                   {% if i > sval %}

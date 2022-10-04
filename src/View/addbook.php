@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $bookAuthor = $_POST['book_author'];
         $bookEdition = $_POST['book_edition'];
         $bookDes = $_POST['book_des'];
-        $bookRating = $_POST['book_rating'];
+        $bookRating = 0; //$_POST['book_rating'];
         $ownerId = $_SESSION['user_id'];
         $addNewBook = $book->addNewBook(
             $newBookImage,

@@ -263,7 +263,25 @@ class UserM
         $stmt->close();
         return $res;
     }
-
+    /**
+     * Function getrating to get previous rating.
+     * 
+     * @param  $requesterId is requester id.
+     * 
+     * @return array is array of previous rating and rater .
+     */
+    public function getUserRating(int $requesterId):array
+    {
+        $sql = "SELECT rating, rater FROM `register` WHERE id = ?";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bind_param("i", $requesterId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $arr =$res->fetch_assoc();
+        $stmt->close();
+        return $arr;
+        
+    }
     /**
      * Function userRating
      * 
@@ -272,11 +290,11 @@ class UserM
      * 
      * @return void nothing.
      */
-    public function userRating($rating, $requesterId):void
+    public function updateUserRating(float $rating, int $rater, int $requesterId):void
     {
-        $sql = "UPDATE `register` SET rating = ? WHERE id = ?";
+        $sql = "UPDATE `register` SET rating = ?, rater = ? WHERE id = ?";
         $stmt = $this->_conn->prepare($sql);
-        $stmt->bind_param("di", $rating, $requesterId);
+        $stmt->bind_param("dii", $rating, $rater, $requesterId);
         $stmt->execute();
     }
 

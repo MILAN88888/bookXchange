@@ -15,7 +15,7 @@ $(document).ready(function () {
             }
         },messages:{
             phone_no:{
-                required:"Enter number",
+                required:"Enter Mobile number",
             },
             pass:{
                 required:"Enter password",

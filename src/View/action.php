@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $ownerId = $_POST['ownerid'];
         $status = $_POST['status'];
         $reason = $_POST['reason'];
-        $user->userRating($rating, $requesterId);
+        $user->updateUserRating($rating, $requesterId);
         $book->updateRequest($requesterId, $bookId, $ownerId, $status, $reason);
     }
 
@@ -202,8 +202,9 @@ if (isset($_GET['type']) && $_GET['type'] == 'bookrequest') {
 if (isset($_GET['type']) && $_GET['type'] == 'bookreturnrequest') {
     $bookId = $_POST['bookid'];
     $ownerId = $_POST['ownerid'];
+    $bookRating = $_POST['bookrating'];
     $requesterId = $_SESSION['user_id'];
-    $book->bookReturnRequest($bookId, $ownerId, $requesterId);
+    $book->bookReturnRequest($bookId, $ownerId, $requesterId, $bookRating);
 }
 
 if (isset($_GET['type']) && $_GET['type'] == 'search') {

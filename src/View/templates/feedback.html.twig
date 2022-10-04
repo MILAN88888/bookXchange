@@ -1,56 +1,67 @@
 <div class="all-feedback-container">
-<button id="close-feedback">x</button>
-<h4>{{bookfeedback.book_name}}</h4>
-<img src="../Upload/Books/{{ bookfeedback.image }}" width="50px" height="50px" />
-<p><b>Book Name</b> : {{bookfeedback.book_name}}<br>
-  <b>Description</b>: {{bookfeedback.description}}<br>
-  <b>Upload By</b>:<a href="#" id="ownerdetail"> {{bookfeedback.user_name}}</a><br>
-  <b>User Rating</b>: {{bookfeedback.rating}}
-</p>
-{% if userId != bookfeedback.owner_id %}
+  <button id="close-feedback">x</button>
+  <h4>{{bookfeedback.book_name}}</h4>
+  <img src="../Upload/Books/{{ bookfeedback.image }}" width="50px" height="50px" />
+  <p><b>Book Name</b> : {{bookfeedback.book_name}}<br>
+    <b>Description</b>: {{bookfeedback.description}}<br>
+    <b>Upload By</b>:<a href="#" id="ownerdetail"> {{bookfeedback.user_name}}</a><br>
+    <b>User Rating</b>: {{bookfeedback.rating}}
+  </p>
+  {% if userId != bookfeedback.owner_id %}
   {% if reqst == 0 %}
   <button disabled>Requested</button>
   {% elseif reqst == 1 %}
-  <button id="returnrequest{{bookfeedback.id}}" onclick="bookreturnrequest('{{ bookfeedback.id }}', '{{ bookfeedback.owner_id }}')">Return</button>
+  <button id="returnrequest{{bookfeedback.id}}"
+    onclick="bookreturnrequest('{{ bookfeedback.id }}', '{{ bookfeedback.owner_id }}')">Return</button>
   {% elseif reqst == 2 %}
   <button disabled>Return Requested</button>
   {% else %}
-  <button id="request{{bookfeedback.id}}" onclick="bookrequest('{{ bookfeedback.id }}', '{{ bookfeedback.owner_id }}')">Request</button>
+  <button id="request{{bookfeedback.id}}"
+    onclick="bookrequest('{{ bookfeedback.id }}', '{{ bookfeedback.owner_id }}')">Request</button>
   {% endif %}
-{% endif %}
-{{reqst.rq_status}}
-<form id="feedback-form">
-  <input hidden type="text" value="{{book.id}}" name="book_id">
-  <input type="text" id="feedback" name="feedback" placeholder="enter feedback" required>
-  <input type="submit" name="feed-submit" value="feedback">
-</form>
-<div id="allfeedback-div">
+  {% endif %}
+  {{reqst.rq_status}}
+  <form id="feedback-form">
+    <input hidden type="text" value="{{book.id}}" name="book_id">
+    <input type="text" id="feedback" name="feedback" placeholder="enter feedback" required>
+    <input type="submit" name="feed-submit" value="feedback">
+  </form>
+  <div id="allfeedback-div">
 
+  </div>
+  <div id="ownerdetail-div">
+    <img src="../Upload/Users/{{bookfeedback.user_image}}" width="50px" height="50x" style="border-radius: 20px;" />
+    <table>
+      <tr>
+        <th>Name</th>
+        <td>{{bookfeedback.user_name}}</td>
+      </tr>
+      <tr>
+        <th>Phone</th>
+        <td>{{bookfeedback.mobile_no}}</td>
+        </td>
+      </tr>
+      <tr>
+        <th>Address</th>
+        <td>{{bookfeedback.address}}</td>
+        </td>
+      </tr>
+      <tr>
+        <th>Email</th>
+        <td>{{bookfeedback.email}}</td>
+        </td>
+      </tr>
+    </table>
+  </div>
 </div>
-<div id="ownerdetail-div">
-  <img src="../Upload/Users/{{bookfeedback.user_image}}" width="50px" height="50x" style="border-radius: 20px;" />
-  <table>
-    <tr>
-      <th>Name</th>
-      <td>{{bookfeedback.user_name}}</td>
-    </tr>
-    <tr>
-      <th>Phone</th>
-      <td>{{bookfeedback.mobile_no}}</td>
-      </td>
-    </tr>
-    <tr>
-      <th>Address</th>
-      <td>{{bookfeedback.address}}</td>
-      </td>
-    </tr>
-    <tr>
-      <th>Email</th>
-      <td>{{bookfeedback.email}}</td>
-      </td>
-    </tr>
-  </table>
-</div>
+<div id="book-rating-div">
+  <p><b>_____Book Rating_____</b></p>
+  <button id="book-rating-closer">x</button>
+  <form id="book-rating-form">
+    <input type="number" min="1" max="5" step="0.5" id="book_rating" name="book_rating" placeholder="Rating 1 to 5">
+    <br><br>
+    <input type="submit" name="boo_rating_submit" value="submit">
+  </form>
 </div>
 <style>
   #close-feedback {
@@ -75,59 +86,98 @@
     border-radius: 20px;
     padding: 10px;
   }
-  .all-feedback-container
-  {
+
+  .all-feedback-container {
     margin-left: 10px;
+  }
+
+  #book-rating-div {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: aquamarine;
+    border: 1px solid black;
+    border-radius: 20px;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 10px;
+    width: 300px;
+  }
+
+  #book-rating-closer {
+    float: right;
+    background-color: red;
+  }
+  .error{
+    color:red;
   }
 </style>
 <script>
   $(document).find('#close-feedback').click(function () {
     $('#bookfeedback-div').hide(800);
- 
+
   });
   $(document).find('#ownerdetail').click(function () {
     $(document).find('#ownerdetail-div').toggle();
   })
-  function bookrequest(bookid, ownerid)
-  {
-    console.log(bookid);
-    console.log(ownerid);
+  function bookrequest(bookid, ownerid) {
+
     $.ajax({
-        url:'action.php?type=bookrequest',
-        type:'post',
-        dataType:'json',
-        data:{'bookid':bookid,'ownerid':ownerid},
-        success:function(res){
-            console.log(res.request);
-            if(res.request == true)
-            {
-             
-                    $(document).find('#request'+bookid).html('Requested');
-                    $(document).find('#request'+bookid).prop('disabled', true);
-            }
+      url: 'action.php?type=bookrequest',
+      type: 'post',
+      dataType: 'json',
+      data: { 'bookid': bookid, 'ownerid': ownerid },
+      success: function (res) {
+        console.log(res.request);
+        if (res.request == true) {
+
+          $(document).find('#request' + bookid).html('Requested');
+          $(document).find('#request' + bookid).prop('disabled', true);
         }
+      }
 
     })
   }
-  function bookreturnrequest(bookid, ownerid)
-  {
-    console.log(bookid);
-    console.log(ownerid);
-    $.ajax({
-        url:'action.php?type=bookreturnrequest',
-        type:'post',
-        dataType:'json',
-        data:{'bookid':bookid,'ownerid':ownerid},
-        success:function(res){
-            console.log(res.returnrequest);
-            if(res.returnrequest == true)
-            {
-             
-                    $(document).find('#returnrequest'+bookid).html('Return Requested');
-                    $(document).find('#returnrequest'+bookid).prop('disabled', true);
-            }
+  function bookreturnrequest(bookid, ownerid) {
+    $('#book-rating-div').show();
+    $('#book-rating-form').submit(function (e) {
+      e.preventDefault();
+      var rating = $('#book_rating').val();
+      $.ajax({
+        url: 'action.php?type=bookreturnrequest',
+        type: 'post',
+        dataType: 'json',
+        data: { 'bookid': bookid, 'ownerid': ownerid, 'bookrating':rating },
+        success: function (res) {
+          console.log(res.returnrequest);
+          if (res.returnrequest == true) {
+            $(document).find('#book-rating-div').hide();
+            $(document).find('#book-rating-form')[0].reset();
+            $(document).find('#returnrequest' + bookid).html('Return Requested');
+            $(document).find('#returnrequest' + bookid).prop('disabled', true);
+          }
         }
 
+      })
     })
   }
+  $('#book-rating-closer').click(function () {
+    $(document).find('#book-rating-div').hide()
+    $(document).find('#book-rating-form')[0].reset();
+  })
+  $(document).ready(function () {
+    $('#book-rating-form').validate({
+      rules: {
+        book_rating: {
+          required: true,
+        }
+      }, messages: {
+        book_rating: {
+          required: "Enter book rating",
+        }
+      }
+    })
+  })
 </script>

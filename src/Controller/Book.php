@@ -302,11 +302,21 @@ class Book
      * @param $bookId      is book id.
      * @param $ownerId     is book ownerId.
      * @param $requesterId is  id  of requester.
+     * @param $bookRating is book rating.
      *
      * @return void array in json format.
      */
-    public function bookReturnRequest(int $bookId, int $ownerId, int $requesterId)
-    {
+    public function bookReturnRequest(
+        int $bookId,
+        int $ownerId,
+        int $requesterId,
+        float $bookRating
+    ) {
+        $prevRating = $this->bookM->getBookRating($bookId);
+        $finalRating = (($prevRating['rating'] * $prevRating['rater']) + $bookRating)/($prevRating['rater'] + 1);
+        $finalRating = round($finalRating, 1);
+        $rater = $prevRating['rater'] + 1;
+        $this->bookM->updateBookRating($bookId, $finalRating, $rater);
         $request = $this->bookM->bookReturnRequest($bookId, $ownerId, $requesterId);
         $res = ['returnrequest'=>$request];
         echo json_encode($res);
@@ -394,18 +404,20 @@ class Book
     }
     /**
      * Function bookSeach
-     * 
+     *
      * @param $bookData is book data to search
-     * 
+     *
      * @return void is array of matched records
      */
-    public function bookSearch(string $bookData):void
+    public function bookSearch(string $bookData): void
     {
         $bookSearch = $this->bookM->bookSearch($bookData);
-        $bookSearchhtml = $this->_twig->render('searchbookdata.html.twig', ['books'=>$bookSearch]);
+        $bookSearchhtml = $this->_twig->render(
+            'searchbookdata.html.twig',
+            ['books'=>$bookSearch]
+        );
         // $res = ['bookhtml'=>$bookSearchhtml];
         // echo json_encode($res);
         echo $bookSearchhtml;
     }
-   
 }

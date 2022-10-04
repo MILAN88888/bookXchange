@@ -55,7 +55,7 @@ class BookM
         LEFT JOIN `request` as r on r.book_id = b.id AND r.requester_id = ?
          WHERE b.status = ? LIMIT ?,?";
         $stmt = $this->_conn->prepare($sql);
-        $stmt->bind_param("isii",$userId, $status, $start, $perPage);
+        $stmt->bind_param("isii", $userId, $status, $start, $perPage);
         $stmt->execute();
         $res = $stmt->get_result();
         if ($res->num_rows === 0) {
@@ -311,7 +311,7 @@ class BookM
      *
      * @return mixed array of status
      */
-    public function requestStatus(int $bookid, int $userId):mixed
+    public function requestStatus(int $bookid, int $userId): mixed
     {
         $sql ="SELECT status FROM `request` WHERE book_id = ? and requester_id = ?";
         $stmt = $this->_conn->prepare($sql);
@@ -360,7 +360,7 @@ class BookM
         $status = 0;
         $reason = '';
         $isPresentId = $this->isPresentId($bookId, $ownerId, $requesterId);
-        $presentId = isset($isPresentId['id'])?$isPresentId['id']:null;
+        $presentId = isset($isPresentId['id']) ? $isPresentId['id'] : null;
         $sql = "INSERT INTO `request` 
         (id,requester_id,owner_id,book_id,status,
         reason,rqst_date,issued_date,return_date)
@@ -529,12 +529,12 @@ class BookM
 
      /**
      * Function bookSeach
-     * 
+     *
      * @param $bookData is book data to search
-     * 
+     *
      * @return mixed is array of matched records
      */
-    public function bookSearch(string $bookData):mixed
+    public function bookSearch(string $bookData): mixed
     {
         $bookData = "%".$bookData."%";
         $sql = "SELECT * FROM `books` WHERE book_name LIKE ? OR author LIKE ?";
@@ -549,5 +549,40 @@ class BookM
         $stmt->close();
         return $arr;
     }
-   
+
+    /**
+     * Function getBookRating
+     * 
+     * @param $bookId is book id.
+     * 
+     * @return array is array of rating and rater.
+     */
+    public function getBookRating(int $bookId):array 
+    {
+        $sql = "SELECT rating, rater FROM `books` WHERE id = ?";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bind_param("i", $bookId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $arr =$res->fetch_assoc();
+        $stmt->close();
+        return $arr;
+        
+    }
+    /**
+     * Function updateBookRating
+     *
+     * @param $bookId is book id.
+     * @param $bookRating is book rating.
+     * @param $rater is no of rater.
+     *
+     * @return void nothing
+     */
+    public function updateBookRating(int $bookId, float $bookRating, int $rater): void
+    {
+        $sql = "UPDATE `books` SET rating = ?, rater = ? WHERE id = ?";
+        $stmt = $this->_conn->prepare($sql);
+        $stmt->bind_param("dii", $bookRating, $rater, $bookId);
+        $stmt->execute();
+    }
 }
